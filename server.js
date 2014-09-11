@@ -29,26 +29,8 @@ if ('production' === environment) {
 const Models = require('./lib/models.js')(deferedDb);
 
 const
-    queries = {
-        //'getAppErrors': require('./lib/queries/get-app-errors.js')(deferedDb, Q),
-        'getAccountApps': require('./lib/queries/get-account-apps.js')(Models, Q),
-        'getAppName': require('./lib/queries/get-app-name.js')(Models, Q),
-        'getErrorsByHash': require('./lib/queries/get-errors-by-hash.js')(Models, Q),
-        //'getAppByName': require('./lib/queries/get-app-by-name.js')(Models, Q),
-        //'getUserById': require('./lib/queries/get-user-by-id.js')(deferedDb, Q),
-        'getUserByLogin': require('./lib/queries/get-user-by-login.js')(Models, Q),
-        'getErrorsById': require('./lib/queries/get-errors-by-id.js')(Models, Q),
-        'getCommentsByErrorHash': require('./lib/queries/get-comments-by-error-hash.js')(Models, Q),
-        'searchErrors': require('./lib/queries/search-errors.js')(Models, Q),
-    },
-    commands = {
-        'createError': require('./lib/commands/create-error.js')(Models, Q),
-        'initialSetup': require('./lib/commands/initial-setup.js')(Models, Q),
-        'createApp': require('./lib/commands/create-app.js')(Models, Q),
-        'solveErrors': require('./lib/commands/solve-errors.js')(Models, Q),
-        'validatePassword': require('./lib/commands/validate-password.js')(Q),
-        'createComment': require('./lib/commands/create-comment.js')(Models, Q),
-    };
+    queries = require('./lib/queries.js')(Models, Q),
+    commands = require('./lib/commands.js')(Models, Q);
 
 app.use(cors({
     allowedOrigins: config.allowedOrigins
