@@ -1,6 +1,6 @@
 {
   "name": "marinet.api",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Marinet api",
   "main": "index.js",
   "scripts": {
