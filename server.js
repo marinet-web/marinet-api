@@ -121,7 +121,7 @@ app.get('/', function (req, res) {
 app.use(require('./lib/marinet-handler'));
 
 
-publisher.bind('tcp://*:5432', function (err) {
+publisher.bind('tcp://*:5435', function (err) {
     if (!err)
         log.info('0MQ', 'Listening for zmq subscribers...');
     else
