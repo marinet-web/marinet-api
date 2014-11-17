@@ -45,5 +45,5 @@ subscriber.on("message", function (data) {
 
 
 });
-
+log.info('worker','Running... '+process.env.NODE_ENV)
 subscriber.connect("tcp://localhost:5435");
