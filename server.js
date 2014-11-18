@@ -14,9 +14,7 @@ const
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     cors = require('express-cors'),
-    app = express(),
-    zmq = require('zmq'),
-    publisher = zmq.socket('pub');
+    app = express();
 
 let redisClient = {},
     RedisStore = {};
@@ -108,25 +106,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const
-    errors = require('./routes/errors.js')(app, queries, commands, authed, publisher),
+    errors = require('./routes/errors.js')(app, queries, commands, authed),
     account = require('./routes/account.js')(app, config, queries, commands, authed, passport),
     application = require('./routes/application.js')(app, config, commands, authed),
     comments = require('./routes/comments.js')(app, queries, commands, authed);
 
 app.get('/', function (req, res) {
-    res.json('I\'m working...');
+    let pkg = require('./package.json');
+    res.json({name: pkg.name, version: pkg.version,message:'I\'m working...'});
 });
 
 
 app.use(require('./lib/marinet-handler'));
-
-
-publisher.bind('tcp://*:5435', function (err) {
-    if (!err)
-        log.info('0MQ', 'Listening for zmq subscribers...');
-    else
-        log.error(err);
-});
 
 app.listen(app.get('port'), function () {
     log.info('SERVER', 'Express server listening on port ' + app.get('port'));

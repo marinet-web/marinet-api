@@ -1,6 +1,6 @@
 'use strict';
 
-function errors(app, queries, commands, authed, publisher) {
+function errors(app, queries, commands, authed) {
     app.get('/:appName/errors', authed, function (req, res) {
         queries.searchErrors
             .execute({
@@ -22,19 +22,17 @@ function errors(app, queries, commands, authed, publisher) {
     app.post('/error', function (req, res) {
         let error = req.body;
 
-        publisher.send(JSON.stringify({
-            type: 'newerror',
-            error: error,
-            app: {
-                id: req.headers.marinetappid,
-                key: req.headers.marinetappkey
-            },
-            date: Date.now()
-        }));
-
-        res.status(201).json({
-            'message': 'queued'
-        });
+        queries.getAppName.execute(req.headers.marinetappid, req.headers.marinetappkey)
+            .then(function (app) {
+                return commands.createError.execute(error, app)
+                    .then(function (error) {
+                        res.status(201).json({message: 'Error created'});
+                    });
+            })
+            .catch(function (err) {
+                console.log(err);
+                res.status(500).json({message: 'Can\'t create error'});
+            });
 
     });
 
