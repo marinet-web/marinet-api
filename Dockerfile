@@ -58,6 +58,41 @@ RUN yum -y install nodejs; yum clean all
 RUN yum -y groupinstall 'Development Tools'; yum clean all
 
 
+###########################
+##### Install MongoDB #####
+###########################
+
+# Configure the package management system (yum).
+
+RUN echo $'[mongodb-org-3.2] \n\
+name=MongoDB Repository \n\
+baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64/ \n\
+gpgcheck=0 \n\
+enabled=1' > /etc/yum.repos.d/mongodb-org-3.2.repo
+
+# Install the MongoDB packages and associated tools.
+
+RUN yum -y install mongodb-org; yum clean all
+
+
+#########################
+##### Install Redis #####
+#########################
+
+# Let's begin with downloading the application source
+
+RUN wget http://download.redis.io/releases/redis-3.0.6.tar.gz
+
+# Extract the contents of the tar archive and enter the directory
+
+RUN tar xzvf redis-3.0.6.tar.gz
+WORKDIR redis-3.0.6
+
+# Build the program using the Makefile
+
+RUN make
+
+
 #######################
 ##### Install Git #####
 #######################
