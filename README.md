@@ -3,12 +3,12 @@
 
 ### Instalação
 
- * `git clone https://jroliveira@bitbucket.org/kibiluzbad/marinet-api.git`
+ * `git clone https://bitbucket.org/kibiluzbad/marinet-api.git`
  * `docker build -t marinet-api .`
  * `docker run -i -t marinet-api /bin/bash`
- * `docker ls -a`
+ * `docker ps -a`
  
-| CONTAINER ID |    IMAGE    |   COMMAND   |    CREATED    | STATUS | PORTS | NAMES |
+| CONTAINER ID | IMAGE       | COMMAND     | CREATED       | STATUS | PORTS | NAMES |
 |--------------|-------------|-------------|---------------|--------|-------|-------|
 | b076f849cac1 | marinet-api | "/bin/bash" | 6 seconds ago | Exited |  --   |  --   |
  
