@@ -1,4 +1,4 @@
-FROM centos:centos7
+FROM  centos/c7-systemd 
 MAINTAINER Junior Oliveira "junolive@gmail.com"
 
 
@@ -13,7 +13,7 @@ RUN yum -y update; yum clean all
 # Download Additional Tools for Building From Source
 
 RUN yum -y install uuid-devel; yum clean all
-RUN yum -y install pkgconfig; yum clean all
+RUN yum -y install pkgconfig initscripts; yum clean all
 RUN yum -y install libtool; yum clean all
 RUN yum -y install gcc-c++; yum clean all
 
@@ -72,8 +72,7 @@ enabled=1' > /etc/yum.repos.d/mongodb-org-3.2.repo
 
 # Install the MongoDB packages and associated tools.
 
-RUN yum -y install mongodb-org; yum clean all
-
+RUN yum -y install mongodb-org ; yum clean all;systemctl enable mongod;  
 
 #########################
 ##### Install Redis #####
@@ -136,5 +135,8 @@ RUN git clone git@bitbucket.org:kibiluzbad/marinet-api.git /work/marinet-api
 # Setup app
 
 WORKDIR /work/marinet-api
+RUN npm install -g node-gyp 
 RUN npm install
-#CMD npm start
+RUN cd node_modules/mongodb && npm install
+CMD ["/usr/sbin/init","npm start"]
+

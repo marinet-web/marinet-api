@@ -4,8 +4,8 @@
 ### Instalação
 
  * `git clone https://bitbucket.org/kibiluzbad/marinet-api.git`
- * `docker build -t marinet-api .`
- * `docker run -i -t marinet-api /bin/bash`
+ * ` docker build --rm -t marinet-api .`
+ * `docker run -ti --privileged -v /tmp/$(mktemp -d):/run -v /sys/fs/cgroup:/sys/fs/cgroup:ro marinet-api`
  * `docker ps -a`
  
 | CONTAINER ID | IMAGE       | COMMAND     | CREATED       | STATUS | PORTS | NAMES |
