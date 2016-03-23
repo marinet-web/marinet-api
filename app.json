@@ -1,0 +1,5 @@
+{
+  "name": "marinet-api",
+  "description": "marinet rest api",
+  "image": "heroku/nodejs"
+}

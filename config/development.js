@@ -1,7 +1,10 @@
 'use strict';
 
+var MONGO_ADDR = process.env.MONGO_PORT_27017_TCP_ADDR || 'localhost';
+var MONGO_PORT = process.env.MONGO_PORT_27017_TCP_PORT || 27017;
+
 module.exports = {
-    'db': 'mongodb://localhost/marinetdb',
+    'db': 'mongodb://'+MONGO_ADDR+':'+MONGO_PORT+'/marinetdb',
     'dbName': 'marinetdb',
     'account': {
         'defaultId': '005aeacc-d8ce-48c6-9ed8-cb89aa29bdad'
@@ -12,6 +15,6 @@ module.exports = {
             key: 'ac0c0afe317621c1dfae6645bcf7d855b9ecf40f1162952ee3676edbba79f80b',
             id: '540a26f033026ce20a07ec33'
         },
-        rootUrl: 'http://localhost:3000'
+        rootUrl: 'http://localhost:8080'
     }
 }
