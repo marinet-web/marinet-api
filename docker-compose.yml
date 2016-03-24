@@ -1,31 +1,26 @@
 web:
   build: .
-  command: 'bash -c ''/app/heroku/node/bin/npm start'''
+  command: 'bash -c ''node server.js'''
   working_dir: /app/user
   environment:
     PORT: 8080
+    MONGOLAB_URI: 'mongolab:27017'
   ports:
     - '8080:8080'
   links:
-    - redis
-    - mongo
+    - mongolab
 shell:
   build: .
   command: bash
   working_dir: /app/user
   environment:
     PORT: 8080
+    MONGOLAB_URI: 'mongolab:27017'
   ports:
     - '8080:8080'
+  links:
+    - mongolab
   volumes:
     - '.:/app/user'
-  links:
-    - redis  
-    - mongo
-mongo:
+mongolab:
   image: mongo
-  command: --smallfiles
-  ports:
-    - "27017:27017"
-redis:
-  image: redis:latest

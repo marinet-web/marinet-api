@@ -1,15 +1,14 @@
 'use strict';
 
-var MONGO_ADDR = process.env.MONGO_PORT_27017_TCP_ADDR || 'localhost';
-var MONGO_PORT = process.env.MONGO_PORT_27017_TCP_PORT || 27017;
+var MONGO_HOST = process.env.MONGOLAB_URI || 'localhost:27017';
 
 module.exports = {
-    'db': 'mongodb://'+MONGO_ADDR+':'+MONGO_PORT+'/marinetdb',
+    'db': 'mongodb://'+MONGO_HOST+'/marinetdb',
     'dbName': 'marinetdb',
     'account': {
         'defaultId': '005aeacc-d8ce-48c6-9ed8-cb89aa29bdad'
     },
-    'allowedOrigins': ['localhost', 'localhost:9003', 'marinet.me'],
+    'allowedOrigins': ['localhost', 'localhost:9003', 'marinet.me', 'http://marinet.herokuapp.com', 'http://marinet.herokuapp.com','marinet.herokuapp.com'],
     'marinet': {
         app: {
             key: 'ac0c0afe317621c1dfae6645bcf7d855b9ecf40f1162952ee3676edbba79f80b',

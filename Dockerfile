@@ -28,4 +28,3 @@ WORKDIR /app/user
 ADD package.json /app/user/
 RUN /app/heroku/node/bin/npm install
 ADD . /app/user/
-
