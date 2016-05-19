@@ -1,26 +1,13 @@
-web:
-  build: .
-  command: 'bash -c ''node server.js'''
-  working_dir: /app/user
-  environment:
-    PORT: 8080
-    MONGOLAB_URI: 'mongolab:27017'
-  ports:
-    - '8080:8080'
-  links:
-    - mongolab
-shell:
-  build: .
-  command: bash
-  working_dir: /app/user
-  environment:
-    PORT: 8080
-    MONGOLAB_URI: 'mongolab:27017'
-  ports:
-    - '8080:8080'
-  links:
-    - mongolab
-  volumes:
-    - '.:/app/user'
-mongolab:
-  image: mongo
+version: '2'
+services:
+  mongolab:
+    image: mongo
+  web:
+    build: .
+    command: 'bash -c ''node server.js'''
+    working_dir: /app/user
+    environment:
+      PORT: 8080
+      MONGOLAB_URI: 'mongolab:27017'
+    ports:
+      - "8080:8080"
