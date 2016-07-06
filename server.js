@@ -14,6 +14,7 @@ const
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     cors = require('express-cors'),
+    jwt = require('express-jwt'),
     app = express();
 
 let redisClient = {},
@@ -37,21 +38,9 @@ app.use(bodyParser.json());
 app.use(logger('combined'));
 app.set('port', process.env.PORT || 3000);
 
-const authed = function (req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    } else if (redisClient.ready || 'production' !== environment) {
-        res.status(403).json({
-            error: "forbidden",
-            reason: "not_authenticated"
-        });
-    } else {
-        res.status(503).json({
-            error: "service_unavailable",
-            reason: "authentication_unavailable"
-        });
-    }
-};
+const authed = jwt({
+  secret: config.secret
+});
 
 if (environment === 'production')
     redisClient

@@ -1,6 +1,12 @@
 'use strict';
 
+const   _       = require('lodash'),
+        jwt     = require('jsonwebtoken');
+
 function account(app, config, queries, commands, authed, passport) {
+    function createToken(user) {
+        return jwt.sign(_.omit(user, 'password'), config.secret, { expiresIn: 60*5 });
+    }
     app.get('/account/apps', authed, function (req, res) {
         queries.getAccountApps.execute(req.user.accountId)
             .then(function (apps) {
@@ -32,12 +38,7 @@ function account(app, config, queries, commands, authed, passport) {
     app.post('/login',
         passport.authenticate('local'),
         function (req, res) {
-            res.json({
-                'username': req.user.name,
-                'role': req.user.roles[0],
-                'accountName': req.user.accountName,
-                'email': req.user.email,
-            });
+            res.json(createToken(req.user));
         });
 
     app.delete('/logout', authed, function (req, res) {

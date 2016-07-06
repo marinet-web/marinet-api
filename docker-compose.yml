@@ -5,6 +5,8 @@ services:
   web:
     build: .
     command: 'bash -c ''node server.js'''
+    volumes:
+        - ./:/app/user
     working_dir: /app/user
     environment:
       PORT: 8080
