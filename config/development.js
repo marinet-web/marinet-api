@@ -9,7 +9,7 @@ module.exports = {
     'account': {
         'defaultId': '005aeacc-d8ce-48c6-9ed8-cb89aa29bdad'
     },
-    'allowedOrigins': ['localhost', 'localhost:9003', 'localhost:4200', 'marinet.me', 'http://marinet.herokuapp.com', 'http://marinet.herokuapp.com','marinet.herokuapp.com'],
+    'allowedOrigins': ['http://localhost', 'http://localhost:9003', 'http://localhost:4200', 'http://marinet.me', 'http://marinet.herokuapp.com', 'http://marinet.herokuapp.com','marinet.herokuapp.com'],
     'marinet': {
         'app': {
             'key': 'ac0c0afe317621c1dfae6645bcf7d855b9ecf40f1162952ee3676edbba79f80b',

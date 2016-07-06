@@ -13,7 +13,7 @@ const
     cookieParser = require('cookie-parser'),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    cors = require('express-cors'),
+    cors = require('cors'),
     jwt = require('express-jwt'),
     app = express();
 
@@ -32,24 +32,27 @@ const
     commands = require('./lib/commands.js')(Models, Q);
 
 app.use(cors({
-    allowedOrigins: config.allowedOrigins
+    origin: function (origin, callback) {
+        var originIsWhitelisted = config.allowedOrigins.indexOf(origin) !== -1;
+        callback(null, originIsWhitelisted);
+    }
 }));
 app.use(bodyParser.json());
 app.use(logger('combined'));
 app.set('port', process.env.PORT || 3000);
 
 const authed = jwt({
-  secret: config.secret
+    secret: config.secret
 });
 
 if (environment === 'production')
     redisClient
-    .on('ready', function () {
-        log.info('REDIS', 'ready');
-    })
-    .on('error', function (err) {
-        log.error('REDIS', err.message);
-    });
+        .on('ready', function () {
+            log.info('REDIS', 'ready');
+        })
+        .on('error', function (err) {
+            log.error('REDIS', err.message);
+        });
 
 passport.serializeUser(function (user, done) {
     done(null, user.email);
@@ -102,7 +105,7 @@ const
 
 app.get('/', function (req, res) {
     let pkg = require('./package.json');
-    res.json({name: pkg.name, version: pkg.version,message:'I\'m working...'});
+    res.json({ name: pkg.name, version: pkg.version, message: 'I\'m working...' });
 });
 
 

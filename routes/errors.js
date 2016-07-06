@@ -81,7 +81,7 @@ function errors(app, queries, commands, authed) {
             }).done();
     });
 
-    app.get('/error/throw', function (req, res) {
+    app.get('/error/throw', authed, function (req, res) {
         throw new Error("Error test! Try to catch this!");
 
     });

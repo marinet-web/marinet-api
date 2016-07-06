@@ -4,7 +4,7 @@ services:
     image: mongo
   web:
     build: .
-    command: 'bash -c ''node server.js'''
+    command: 'bash -c ''nodemon server.js'''
     volumes:
         - ./:/app/user
     working_dir: /app/user
