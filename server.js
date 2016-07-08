@@ -20,10 +20,10 @@ const
 let redisClient = {},
     RedisStore = {};
 
-if ('production' === environment) {
-    redisClient = require('redis').createClient();
-    RedisStore = require('connect-redis')(session);
-}
+// if ('production' === environment) {
+//     redisClient = require('redis').createClient();
+//     RedisStore = require('connect-redis')(session);
+// }
 
 const Models = require('./lib/models.js')(deferedDb);
 
@@ -45,14 +45,14 @@ const authed = jwt({
     secret: config.secret
 });
 
-if (environment === 'production')
-    redisClient
-        .on('ready', function () {
-            log.info('REDIS', 'ready');
-        })
-        .on('error', function (err) {
-            log.error('REDIS', err.message);
-        });
+// if (environment === 'production')
+//     redisClient
+//         .on('ready', function () {
+//             log.info('REDIS', 'ready');
+//         })
+//         .on('error', function (err) {
+//             log.error('REDIS', err.message);
+//         });
 
 passport.serializeUser(function (user, done) {
     done(null, user.email);
@@ -90,9 +90,7 @@ app.use(session({
     secret: 'eae79eb5-5a0d-4e14-9071-a38b02c4d712',
     saveUninitialized: true,
     resave: true,
-    store: environment === 'production' ? new RedisStore({
-        client: redisClient
-    }) : null
+    store: null
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -105,7 +103,7 @@ const
 
 app.get('/', function (req, res) {
     let pkg = require('./package.json');
-    res.json({ name: pkg.name, version: pkg.version, message: 'I\'m working...' });
+    res.json({ name: pkg.name, version: pkg.version, message: 'I\'m working...', env: process.env.NODE_ENV });
 });
 
 

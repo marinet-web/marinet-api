@@ -4,6 +4,16 @@ services:
     image: mongo
   web:
     build: .
+    command: 'node server.js'
+    working_dir: /app/user
+    environment:
+      PORT: 8080
+      MONGOLAB_URI: 'mongolab:27017'
+      NODE_ENV: 'production'
+    ports:
+      - "8080:8080"
+  web-dev:
+    build: .
     command: 'bash -c ''nodemon server.js'''
     volumes:
         - ./:/app/user
