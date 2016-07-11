@@ -14,14 +14,14 @@ gulp.task('watch', function() {
   gulp.watch('**/*.ts', ['typescript']);
 });
 
-gulp.task('serve', ['typescript'], function () {
-  livereload.listen();
+gulp.task('serve', ['watch'], function () {
+  //livereload.listen();
   nodemon({
     script: 'deploy/server.js',
     ext: 'js',
   }).on('restart', function () {
-    setTimeout(function () {
-      livereload.changed();
-    }, 500);
+    // setTimeout(function () {
+    //   livereload.changed();
+    // }, 500);
   });
 });

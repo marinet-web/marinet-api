@@ -21,7 +21,7 @@ export class HomeController {
         this._pingServer.exec();
 
         return {
-            "version": "3.0.0.",
+            "version": "3.0.0",
             "name": "marinet-api",
             "env": process.env.NODE_ENV || "development"
         };

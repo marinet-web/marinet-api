@@ -6,7 +6,7 @@ services:
     image: elasticsearch
   web:
     build: .
-    command: 'ts-node server.ts'
+    command: 'gulp serve'
     volumes:
         - ./:/app/user
     working_dir: /app/user
