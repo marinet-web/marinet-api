@@ -4,5 +4,5 @@
 ### Instalação
 
  * `git clone https://bitbucket.org/kibiluzbad/marinet-api.git`
- * `docker-compose up mongolab web-dev`
+ * ` docker-compose up mongolab searchbox web`
  
