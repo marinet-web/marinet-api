@@ -21,6 +21,6 @@ RUN echo "export PATH=\"/app/heroku/node/bin:/app/user/node_modules/.bin:\$PATH\
 
 WORKDIR /app/user
 ADD package.json /app/user/
-RUN /app/heroku/node/bin/npm install typings tsc ts-node -g
+RUN /app/heroku/node/bin/npm install typings typescript tsc ts-node -g
 RUN /app/heroku/node/bin/npm install
 ADD . /app/user/

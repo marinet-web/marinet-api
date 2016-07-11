@@ -13,6 +13,6 @@ services:
     environment:
       PORT: 3000
       MONGOLAB_URI: 'mongolab:27017'
-      ELASTC_URL: 'searchbox:9200'
+      ELASTIC_URL: 'searchbox:9200'
     ports:
       - "3000:3000"
