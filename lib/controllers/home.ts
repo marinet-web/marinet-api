@@ -6,19 +6,24 @@ import { PingServer } from '../commands';
 @injectable()
 @Controller('/')
 export class HomeController {
-  private _pingServer: PingServer;
+    private _pingServer: PingServer;
 
-  /**
-   *
-   */
-  constructor(@inject("PingServer") pingServer: PingServer) {
-    this._pingServer = pingServer;    
-  }
+    /**
+     *
+     */
+    constructor( @inject("PingServer") pingServer: PingServer) {
+        this._pingServer = pingServer;
+    }
 
-  @Get('/')
-  public get(): string {
-    
-    this._pingServer.exec();
-    return 'Home sweet home';
-  }
+    @Get('/')
+    public get(): any {
+
+        this._pingServer.exec();
+
+        return {
+            "version": "3.0.0.",
+            "name": "marinet-api",
+            "env": process.env.NODE_ENV || "development"
+        };
+    }
 }

@@ -3,7 +3,7 @@ import { Controller, Get } from 'inversify-express-utils';
 import { injectable } from 'inversify';
 
 @injectable()
-@Controller('/')
+@Controller('/api')
 export class ApplicationController {
   @Get('/')
   public get(): string {
