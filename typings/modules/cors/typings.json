@@ -1,0 +1,12 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/typed-typings/npm-cors/fa590440440b39035489f32562f18e8401358463/typings.json",
+    "raw": "registry:npm/cors#2.7.0+20160505024722",
+    "main": "lib/index.d.ts",
+    "version": "^2.7.0",
+    "global": false,
+    "name": "cors",
+    "type": "typings"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/9523296b7637472cf3b7d3acded63aba911d40d1/inversify-express-utils/inversify-express-utils.d.ts",
+    "raw": "registry:dt/inversify-express-utils#1.0.0-alpha.4+20160621002320",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/9523296b7637472cf3b7d3acded63aba911d40d1/inversify-express-utils/inversify-express-utils.d.ts"
+  }
+}

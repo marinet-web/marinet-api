@@ -1,0 +1,8 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/c2e340243fbf22381f2069218d0cb0a9cc382c82/inversify/inversify.d.ts",
+    "raw": "registry:dt/inversify#2.0.0-beta.9+20160623004628",
+    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/c2e340243fbf22381f2069218d0cb0a9cc382c82/inversify/inversify.d.ts"
+  }
+}
