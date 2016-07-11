@@ -3,6 +3,7 @@
   "description": "marinet rest api",
   "image": "heroku/nodejs",
   "addons": [
-    "mongolab:sandbox"
+    "mongolab:sandbox",
+    "searchbox:starter"
   ]
 }

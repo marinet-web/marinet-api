@@ -18,14 +18,9 @@ RUN curl -s https://s3pository.heroku.com/node/v$NODE_ENGINE/node-v$NODE_ENGINE-
 # Export the node path in .profile.d
 RUN echo "export PATH=\"/app/heroku/node/bin:/app/user/node_modules/.bin:\$PATH\"" > /app/.profile.d/nodejs.sh
 
-# install zmq
-RUN git clone https://github.com/zeromq/libzmq /tmp/libzmq
-WORKDIR /tmp/libzmq
-RUN ./autogen.sh && ./configure && make -j 4
-RUN make install && ldconfig
 
 WORKDIR /app/user
 ADD package.json /app/user/
-RUN /app/heroku/node/bin/npm install nodemon -g
+RUN /app/heroku/node/bin/npm install typings tsc ts-node -g
 RUN /app/heroku/node/bin/npm install
 ADD . /app/user/
