@@ -4,22 +4,24 @@ import { injectable, inject } from 'inversify';
 import { SaveMessage } from '../commands';
 import { QueryMessages } from '../queries';
 
+import { TYPES } from '../types';
+
 @injectable()
 @Controller('/api')
 export class MessagesController {
-  
+
   private _saveMessage: SaveMessage;
   private _queryMessages: QueryMessages;
 
   /**
    *
    */
-  constructor(@inject('SaveMessage') saveMessage: SaveMessage,
-  @inject('QueryMessages') queryMessages: QueryMessages ) {
+  constructor( @inject(TYPES.SaveMessage) saveMessage: SaveMessage,
+    @inject(TYPES.QueryMessages) queryMessages: QueryMessages) {
     this._saveMessage = saveMessage;
     this._queryMessages = queryMessages;
   }
-  
+
   @Post('/message')
   public save(request: Request) {
     this._saveMessage.message = request.body;
@@ -28,7 +30,7 @@ export class MessagesController {
 
   @Get('/messages')
   public query() {
-    
+
     return this._queryMessages.exec()
   }
 }

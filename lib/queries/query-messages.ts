@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 
 import { Message } from '../models';
 
+import { TYPES } from '../types';
+
 @injectable()
 export class QueryMessages implements IQuery<Promise<[Message]>> {
 
@@ -12,7 +14,7 @@ export class QueryMessages implements IQuery<Promise<[Message]>> {
     /**
      *
      */
-    constructor( @inject("Client") client: Client) {
+    constructor( @inject(TYPES.Client) client: Client) {
         this._client = client;
     }
 
@@ -30,7 +32,6 @@ export class QueryMessages implements IQuery<Promise<[Message]>> {
                     resp.hits.hits.forEach(element => {
                         let message: Message = <Message>element._source;
                         message.id = element._id;
-                        console.log(message)
                         result.push(message);
                     });
                     return resolve(result);

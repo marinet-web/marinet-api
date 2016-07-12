@@ -2,6 +2,8 @@ import { injectable, inject } from 'inversify';
 import { ICommand } from './i-command';
 import { Client } from 'elasticsearch';
 
+import { TYPES } from '../types';
+
 @injectable()
 export class PingServer implements ICommand{
     
@@ -10,7 +12,7 @@ export class PingServer implements ICommand{
     /**
      *
      */
-    constructor(@inject("Client") client: Client) {
+    constructor(@inject(TYPES.Client) client: Client) {
         this._client = client;
     }
     

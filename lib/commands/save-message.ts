@@ -4,6 +4,8 @@ import { Client, IndexDocumentParams } from 'elasticsearch';
 
 import { Message } from '../models';
 
+import { TYPES } from '../types';
+
 @injectable()
 export class SaveMessage implements ICommand {
 
@@ -22,12 +24,12 @@ export class SaveMessage implements ICommand {
     /**
      *
      */
-    constructor( @inject("Client") client: Client) {
+    constructor( @inject(TYPES.Client) client: Client) {
         this._client = client;
     }
 
     public exec() {
-        //TODO: Save message to ElasticSearch
+        
         let index = {
             index: "messages",
             type: "message",

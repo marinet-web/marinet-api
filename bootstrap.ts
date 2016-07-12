@@ -13,6 +13,7 @@ import { HomeController,
     ApplicationController } from './lib/controllers';
 
 import { TAGS } from './lib/tags';
+import { TYPES } from './lib/types';
 
 let _kernel = new Kernel();
 
@@ -22,10 +23,10 @@ _kernel.bind<Controller>(TYPE.Controller).to(ApplicationController).whenTargetNa
 _kernel.bind<Controller>(TYPE.Controller).to(AccountController).whenTargetNamed(TAGS.AccountController);
 _kernel.bind<Controller>(TYPE.Controller).to(MessagesController).whenTargetNamed(TAGS.MessagesController);
 
-_kernel.bind<Client>("Client").toConstantValue(client);
-_kernel.bind<PingServer>("PingServer").to(PingServer);
-_kernel.bind<SaveMessage>("SaveMessage").to(SaveMessage);
-_kernel.bind<QueryMessages>("QueryMessages").to(QueryMessages);
+_kernel.bind<Client>(TYPES.Client).toConstantValue(client);
+_kernel.bind<PingServer>(TYPES.PingServer).to(PingServer);
+_kernel.bind<SaveMessage>(TYPES.SaveMessage).to(SaveMessage);
+_kernel.bind<QueryMessages>(TYPES.QueryMessages).to(QueryMessages);
 
 export var kernel = _kernel;
 

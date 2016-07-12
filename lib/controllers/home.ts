@@ -3,6 +3,8 @@ import { Controller, Get } from 'inversify-express-utils';
 import { injectable, inject } from 'inversify';
 import { PingServer } from '../commands';
 
+import { TYPES } from '../types';
+
 @injectable()
 @Controller('/')
 export class HomeController {
@@ -11,7 +13,7 @@ export class HomeController {
     /**
      *
      */
-    constructor( @inject("PingServer") pingServer: PingServer) {
+    constructor( @inject(TYPES.PingServer) pingServer: PingServer) {
         this._pingServer = pingServer;
     }
 
