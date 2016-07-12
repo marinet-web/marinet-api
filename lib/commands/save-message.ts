@@ -28,7 +28,7 @@ export class SaveMessage implements ICommand {
         this._client = client;
     }
 
-    public exec() {
+    public exec(): Promise {
         
         let index = {
             index: "messages",
@@ -36,11 +36,13 @@ export class SaveMessage implements ICommand {
             body: this.message
         };
         
-        return this._client.index<Message>(<IndexDocumentParams<Message>>index)
-        .then(result => {
-            console.log(result);
-        }, err =>{
-            console.error(err);
-        });
+        return new Promise((resolver, reject) => {
+               this._client.index<Message>(<IndexDocumentParams<Message>>index)
+                .then(result => {
+                    resolver(result);
+                }, err =>{
+                    reject(err);
+                }); 
+        }); 
     }
 }

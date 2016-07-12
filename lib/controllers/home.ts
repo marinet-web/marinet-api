@@ -20,8 +20,6 @@ export class HomeController {
     @Get('/')
     public get(): any {
 
-        this._pingServer.exec();
-
         return {
             "version": "3.0.0",
             "name": "marinet-api",
