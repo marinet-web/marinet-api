@@ -20,18 +20,27 @@ export class QueryMessages implements IQuery<Promise<[Message]>> {
 
     public exec(): Promise<[Message]> {
 
-        let params: SearchParams = {
-            index: 'messages'
+        let params: any = {
+            "index": "messages",
+            "size": 0,
+            "body": {
+                "aggs": {
+                    "same_messages": {
+                        "terms": { "field": "hash" }
+                    }
+                    
+                }
+            }
         };
 
         return new Promise<[Message]>((resolve, reject) => {
             this._client.search(params, (err, resp) => {
                 if (err) return reject(err);
-                if (resp && resp.hits && resp.hits.hits) {
+                if (resp && resp.hits && resp.aggregations) {
                     let result: Message[] = [];
-                    resp.hits.hits.forEach(element => {
-                        let message: Message = <Message>element._source;
-                        message.id = element._id;
+                    resp.aggregations.same_messages.buckets.forEach(element => {
+                        let message: Message = <Message>element;
+                        //message.id = element._id;
                         result.push(message);
                     });
                     return resolve(result);
