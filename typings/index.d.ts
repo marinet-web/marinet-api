@@ -4,6 +4,7 @@
 /// <reference path="globals/express/index.d.ts" />
 /// <reference path="globals/inversify-express-utils/index.d.ts" />
 /// <reference path="globals/inversify/index.d.ts" />
+/// <reference path="globals/md5/index.d.ts" />
 /// <reference path="globals/morgan/index.d.ts" />
 /// <reference path="globals/node/index.d.ts" />
 /// <reference path="globals/reflect-metadata/index.d.ts" />

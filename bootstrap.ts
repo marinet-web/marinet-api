@@ -5,7 +5,10 @@ import { Kernel } from 'inversify';
 import { Client } from 'elasticsearch';
 import { client } from './lib/get-elastic-search-client';
 
-import { PingServer, SaveMessage } from './lib/commands';
+import { PingServer,
+    SaveMessage,
+    CreateMD5,
+    CreateMessagesIndex } from './lib/commands';
 import { QueryMessages } from './lib/queries';
 import { HomeController,
     MessagesController,
@@ -27,6 +30,8 @@ _kernel.bind<Client>(TYPES.Client).toConstantValue(client);
 _kernel.bind<PingServer>(TYPES.PingServer).to(PingServer);
 _kernel.bind<SaveMessage>(TYPES.SaveMessage).to(SaveMessage);
 _kernel.bind<QueryMessages>(TYPES.QueryMessages).to(QueryMessages);
+_kernel.bind<CreateMD5>(TYPES.CreateMD5).to(CreateMD5);
+_kernel.bind<CreateMessagesIndex>(TYPES.CreateMessagesIndex).to(CreateMessagesIndex);
 
 export var kernel = _kernel;
 

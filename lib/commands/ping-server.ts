@@ -1,11 +1,11 @@
 import { injectable, inject } from 'inversify';
-import { ICommand } from './i-command';
+import { Command } from './command';
 import { Client } from 'elasticsearch';
 
 import { TYPES } from '../types';
 
 @injectable()
-export class PingServer implements ICommand {
+export class PingServer implements Command {
 
     private _client: Client;
 

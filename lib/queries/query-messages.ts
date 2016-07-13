@@ -1,14 +1,14 @@
 import { injectable, inject } from 'inversify';
-import { IQuery } from './i-query';
+import { Query } from './query';
 import { Client, SearchParams } from 'elasticsearch';
 import { Observable } from 'rxjs';
 
-import { Message } from '../models';
+import { MessageAggregation } from '../models';
 
 import { TYPES } from '../types';
 
 @injectable()
-export class QueryMessages implements IQuery<Promise<[Message]>> {
+export class QueryMessages implements Query<Promise<[Message]>> {
 
     private _client: Client;
     /**
@@ -18,7 +18,7 @@ export class QueryMessages implements IQuery<Promise<[Message]>> {
         this._client = client;
     }
 
-    public exec(): Promise<[Message]> {
+    public exec(): Promise<[MessageAggregation]> {
 
         let params: any = {
             "index": "messages",
@@ -26,21 +26,36 @@ export class QueryMessages implements IQuery<Promise<[Message]>> {
             "body": {
                 "aggs": {
                     "same_messages": {
-                        "terms": { "field": "hash" }
+                        "terms": { "field": "hash" },
+                        "aggs": {
+                            "message": {
+                                "terms": {
+                                    "field": "message"
+                                }
+                            },
+                            "datetime": {
+                                "terms": {
+                                    "field": "createdAt"
+                                }
+                            }
+                        }
                     }
-                    
+
                 }
             }
         };
 
-        return new Promise<[Message]>((resolve, reject) => {
+        return new Promise<[MessageAggregation]>((resolve, reject) => {
             this._client.search(params, (err, resp) => {
                 if (err) return reject(err);
                 if (resp && resp.hits && resp.aggregations) {
-                    let result: Message[] = [];
+                    let result: MessageAggregation[] = [];
                     resp.aggregations.same_messages.buckets.forEach(element => {
-                        let message: Message = <Message>element;
-                        //message.id = element._id;
+                        let message: MessageAggregation = <MessageAggregation>{};
+                        message.hash = element.key;
+                        message.message = element.message.buckets[0].key;
+                        message.createdAt = element.datetime.buckets[0].key_as_string;
+                        message.count = element.doc_count;
                         result.push(message);
                     });
                     return resolve(result);
