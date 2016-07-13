@@ -12,8 +12,8 @@ services:
     working_dir: /app/user
     environment:
       PORT: 3000
-      MONGODB_URL: 'mongolab:27017'
-      ELASTIC_URL: 'searchbox:9200'
+      MONGOLAB_URI: 'mongolab:27017'
+      SEARCHBOX_URL: 'searchbox:9200'
       APP_SECRET: 'very secret key!'
       ORIGINS_WHITELIST: 'localhost:4200'
     ports:
