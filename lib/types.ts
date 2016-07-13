@@ -4,5 +4,7 @@ export const TYPES = {
     SaveMessage: Symbol('SaveMessage'),
     QueryMessages: Symbol('QueryMessages'),
     CreateMD5: Symbol('CreateMD5'),
-    CreateMessagesIndex: Symbol('CreateMessagesIndex')
+    CreateMessagesIndex: Symbol('CreateMessagesIndex'),
+    LoginUser: Symbol('LoginUser'),
+    GetMongoDB: Symbol('GetMongoDB'),
 };

@@ -14,5 +14,6 @@ services:
       PORT: 3000
       MONGOLAB_URI: 'mongolab:27017'
       ELASTIC_URL: 'searchbox:9200'
+      ORIGINS_WHITELIST: 'localhost:4200'
     ports:
       - "3000:3000"

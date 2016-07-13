@@ -3,6 +3,7 @@
     "body-parser": "registry:dt/body-parser#0.0.0+20160619023215",
     "elasticsearch": "registry:dt/elasticsearch#0.0.0+20160707221728",
     "express": "registry:dt/express#4.0.0+20160317120654",
+    "express-jwt": "registry:dt/express-jwt#0.0.0+20160629014920",
     "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160701212727",
     "inversify": "registry:dt/inversify#2.0.0-beta.9+20160623004628",
     "inversify-express-utils": "registry:dt/inversify-express-utils#1.0.0-alpha.4+20160621002320",
@@ -15,6 +16,7 @@
   "dependencies": {
     "cors": "registry:npm/cors#2.7.0+20160505024722",
     "jsonwebtoken": "registry:npm/jsonwebtoken#5.5.4+20160208220328",
-    "lodash": "registry:npm/lodash#4.0.0+20160701205107"
+    "lodash": "registry:npm/lodash#4.0.0+20160701205107",
+    "mongodb": "registry:npm/mongodb#2.1.0+20160527161729"
   }
 }

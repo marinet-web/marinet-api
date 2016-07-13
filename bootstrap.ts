@@ -8,8 +8,12 @@ import { client } from './lib/get-elastic-search-client';
 import { PingServer,
     SaveMessage,
     CreateMD5,
-    CreateMessagesIndex } from './lib/commands';
+    CreateMessagesIndex,
+    LoginUser,
+    GetMongoDB } from './lib/commands';
+
 import { QueryMessages } from './lib/queries';
+
 import { HomeController,
     MessagesController,
     AccountController,
@@ -32,6 +36,8 @@ _kernel.bind<SaveMessage>(TYPES.SaveMessage).to(SaveMessage);
 _kernel.bind<QueryMessages>(TYPES.QueryMessages).to(QueryMessages);
 _kernel.bind<CreateMD5>(TYPES.CreateMD5).to(CreateMD5);
 _kernel.bind<CreateMessagesIndex>(TYPES.CreateMessagesIndex).to(CreateMessagesIndex);
+_kernel.bind<LoginUser>(TYPES.LoginUser).to(LoginUser);
+_kernel.bind<GetMongoDB>(TYPES.GetMongoDB).to(GetMongoDB);
 
 export var kernel = _kernel;
 
