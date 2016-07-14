@@ -11,7 +11,7 @@ import { TYPES } from '../types';
 
 
 @injectable()
-export class LoginUser implements Command {
+export class CreateUser implements Command {
     private _getMongoDB: GetMongoDB;
     private _user: User;
     public get user(): User {
@@ -33,7 +33,7 @@ export class LoginUser implements Command {
             //TODO: validate user password and return user
             this._getMongoDB.exec().then((db: Db) => {
                 db.open();
-                db.collection('users').findOne(this._user).then(user => {
+                db.collection('users').insert(this._user).then(user => {
                     db.close();
                     resolver(jwt.sign(_.omit(user, 'password'),
                         process.env.APP_SECRET,
