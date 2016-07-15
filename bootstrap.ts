@@ -23,6 +23,9 @@ import { HomeController,
 import { TAGS } from './lib/tags';
 import { TYPES } from './lib/types';
 
+import { config } from './config';
+import { Config } from './lib/models';
+
 let _kernel = new Kernel();
 
 //TODO: Refcator to use decorator binding
@@ -40,6 +43,7 @@ _kernel.bind<CreateMessagesIndex>(TYPES.CreateMessagesIndex).to(CreateMessagesIn
 _kernel.bind<LoginUser>(TYPES.LoginUser).to(LoginUser);
 _kernel.bind<GetMongoDB>(TYPES.GetMongoDB).to(GetMongoDB);
 _kernel.bind<CreateUser>(TYPES.CreateUser).to(CreateUser);
+_kernel.bind<Config>(TYPES.Config).toConstantValue(config);
 
 export var kernel = _kernel;
 

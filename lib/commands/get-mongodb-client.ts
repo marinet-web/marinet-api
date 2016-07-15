@@ -5,6 +5,7 @@ import { Promise } from 'es6-promise';
 import { Command } from './';
 
 import { TYPES } from '../types';
+import { Config } from '../models';
 
 /**
  * GetMongoDB
@@ -12,18 +13,20 @@ import { TYPES } from '../types';
 @injectable()
 export class GetMongoDB implements Command {
     private _client: MongoClient;
+    private _config: Config;
 
-    constructor() {
+    constructor(@inject(TYPES.Config) config: Config) {
         this._client = new MongoClient();
+        this._config = config;
     }
 
     public exec(): Promise<Db> {
         return new Promise<Db>((resolver, reject) => {
-            console.log(`Connecting to ${process.env.MONGOLAB_URI}`);
-            this._client.connect(process.env.MONGOLAB_URI || 'mongodb://localhost27017',
+            console.log(`Connecting to ${this._config.mongoUrl}`);
+            this._client.connect(this._config.mongoUrl,
                 (err, db) => {
                     if(err) return reject(err);
-                    console.log(`Connected to ${process.env.MONGOLAB_URI}`);
+                    console.log(`Connected to ${this._config.mongoUrl}`);
                     resolver(db);
                 });
         });

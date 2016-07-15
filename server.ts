@@ -6,8 +6,7 @@ import * as cors from 'cors';
 import * as jwt from 'express-jwt';
 
 import { kernel } from './bootstrap';
-
-import { Client } from 'elasticsearch';
+import { config } from './config';
 
 let server = new InversifyExpressServer(kernel);
 
@@ -18,8 +17,7 @@ server.setConfig((app) => {
     app.use(cors({
         origin: (origin, callback) => {
             try {
-                let ok: boolean = (<string>(process.env.ORIGINS_WHITELIST || 'localhost')).split(',')
-                    .indexOf(origin) !== -1
+                let ok: boolean = config.originsWhitelist.indexOf(origin) !== -1
                 callback(null, ok);
             } catch (e) {
                 callback(e, null);
@@ -27,10 +25,10 @@ server.setConfig((app) => {
 
         }
     }));
-    app.use(jwt({ secret: process.env.APP_SECRET})
+    app.use(jwt({ secret: config.appSecret})
     .unless({path: ['/api/account/login', '/setup']}));
 });
 
 let app = server.build();
 
-app.listen(process.env.NODE_ENV || 3000);
+app.listen(config.appPort);

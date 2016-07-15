@@ -8,4 +8,5 @@ export const TYPES = {
     LoginUser: Symbol('LoginUser'),
     GetMongoDB: Symbol('GetMongoDB'),
     CreateUser: Symbol('CreateUser'),
+    Config: Symbol('Config'),
 };

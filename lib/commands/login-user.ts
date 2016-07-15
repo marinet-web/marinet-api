@@ -8,14 +8,15 @@ import * as _ from 'lodash';
 import * as crypto from "crypto";
 
 import { Command, GetMongoDB } from './';
-import { User } from '../models';
+import { User, Config } from '../models';
 import { TYPES } from '../types';
-
 
 @injectable()
 export class LoginUser implements Command {
     private _getMongoDB: GetMongoDB;
     private _user: User;
+    private _config: Config;
+
     public get user(): User {
         return this._user;
     }
@@ -26,21 +27,25 @@ export class LoginUser implements Command {
     /**
      *
      */
-    constructor( @inject(TYPES.GetMongoDB) getMongoDB: GetMongoDB) {
+    constructor( @inject(TYPES.GetMongoDB) getMongoDB: GetMongoDB,
+    @inject(TYPES.Config) config: Config) {
         this._getMongoDB = getMongoDB;
+        this._config = config;
     }
 
     public exec(): Promise<any> {
         return new Promise((resolver, reject) => {
             
-            this._user.password = crypto.createHash('sha512').update(this._user.password).digest('hex');
+            this._user.password = crypto.createHash('sha512')
+            .update(this._user.password)
+            .digest('hex');
 
             this._getMongoDB.exec().then((db: Db) => {
                 db.open();
                 db.collection('users').findOne(this._user).then(user => {
                     db.close();
                     jwt.sign(_.omit(user, 'password'),
-                        process.env.APP_SECRET,
+                        this._config.appSecret,
                         {
                             expiresIn: 60 * 5
                         }, (err, result) => {

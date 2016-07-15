@@ -1,8 +1,9 @@
 import { Client } from 'elasticsearch';
+import { config } from '../config';
 
 export const client = new Client({
-    host: process.env.SEARCHBOX_URL || 'localhost:9200',
-    log: process.env.ELASTIC_LOG_LEVEL || 'trace'
+    host: config.elastic.url,
+    log: config.elastic.log
 });
 
 
