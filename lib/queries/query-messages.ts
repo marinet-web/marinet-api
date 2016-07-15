@@ -13,15 +13,7 @@ import { Promise } from 'es6-promise';
 export class QueryMessages implements Query<Promise<[MessageAggregation]>> {
 
     private _client: Client;
-    private _term: string;
     private _streamFilter: string;
-
-    public get term(): string {
-        return this._term;
-    }
-    public set term(v: string) {
-        this._term = v;
-    }
 
     public get streamFilter(): string {
         return this._streamFilter;
