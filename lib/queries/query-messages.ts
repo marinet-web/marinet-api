@@ -13,6 +13,24 @@ import { Promise } from 'es6-promise';
 export class QueryMessages implements Query<Promise<[MessageAggregation]>> {
 
     private _client: Client;
+    private _term: string;
+    private _streamFilter: string;
+
+    public get term(): string {
+        return this._term;
+    }
+    public set term(v: string) {
+        this._term = v;
+    }
+
+    public get streamFilter(): string {
+        return this._streamFilter;
+    }
+    public set streamFilter(v: string) {
+        this._streamFilter = v;
+    }
+
+
     /**
      *
      */
@@ -21,7 +39,11 @@ export class QueryMessages implements Query<Promise<[MessageAggregation]>> {
     }
 
     public exec(): Promise<[MessageAggregation]> {
-
+        
+        let json = this.streamFilter
+            ? JSON.parse(this.parse(this.streamFilter))
+            : null;
+        
         let params: any = {
             "index": "messages",
             "size": 0,
@@ -47,6 +69,17 @@ export class QueryMessages implements Query<Promise<[MessageAggregation]>> {
             }
         };
 
+        if (json) {
+            params.body.query = {
+                "bool": {
+                    "filter": {
+                        "term": json
+                    }
+                }
+            }
+        }
+
+
         return new Promise<[MessageAggregation]>((resolve, reject) => {
             this._client.search(params, (err, resp) => {
                 if (err) return reject(err);
@@ -65,5 +98,14 @@ export class QueryMessages implements Query<Promise<[MessageAggregation]>> {
                 return resolve(<[MessageAggregation]>[]);
             });
         });
+    }
+
+    //TODO: Create query parser
+    private parse(value): string {
+        let pieces = value.split(':');
+        
+        return `{${pieces.map((item) => {
+            return "\""+item.trim()+"\"";
+        }).join(':')}}`;
     }
 }
