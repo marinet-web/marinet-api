@@ -22,7 +22,7 @@ export class ApplicationController {
   @Get('/')
   public get(request: Request) {
     this._query.userId = request.user._id;
-    return this._query;
+    return this._query.exec();
   }
 
   @Post('/')

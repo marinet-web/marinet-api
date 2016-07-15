@@ -47,15 +47,21 @@ export class HomeController {
     public setup(req: Request, res: Response): any {
         this._createUser.user = <User>{
             email: 'admin@marinet.me',
-            name: 'Admnistrator',
+            name: 'Administrator',
             password: 'password',
             permissions: ['admin']
         };
-        this._createApplication.app = <Application>{name: 'Marinet', query: 'application: marinet'}
+        this._createApplication.app = <Application>{
+            name: 'Marinet',
+            query: 'application: marinet'
+        } 
         console.log('Starting setup');
-        return Promise.all([
-            this._createMessagesIndex.exec(),
-            this._createUser.exec(),
-            this._createApplication.exec()]);
+        return this._createUser.exec().then(user => {
+            this._createApplication.app.users = [user._id];
+            return Promise.all([
+                this._createMessagesIndex.exec(),
+                this._createApplication.exec()]);
+        })
+
     }
 }

@@ -49,7 +49,6 @@ export class CreateApplication implements Command {
             }
             this._createUser.exec()
             .then((user) => {
-                console.log(user);
                 return this._getMongoDB.exec()
                 .then((db) => {
                     //TODO: Create a token command

@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import { Db } from 'mongodb';
+import { Db, ObjectID } from 'mongodb';
 import { Query } from './';
 import { GetMongoDB } from '../commands';
 
@@ -36,7 +36,7 @@ export class QueryApplications implements Query<Promise<[Application]>> {
             this._getMongo.exec().then((db: Db) => {
                 let cursor = db.collection('applications').find({
                     "users": {
-                        "$contains": this._userId
+                        "$all": [new ObjectID(this._userId)]
                     }
                 });
 
