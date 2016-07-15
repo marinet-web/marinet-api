@@ -16,3 +16,4 @@
 /// <reference path="modules/jsonwebtoken/index.d.ts" />
 /// <reference path="modules/lodash/index.d.ts" />
 /// <reference path="modules/mongodb/index.d.ts" />
+/// <reference path="modules/node-uuid/index.d.ts" />

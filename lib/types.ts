@@ -9,4 +9,6 @@ export const TYPES = {
     GetMongoDB: Symbol('GetMongoDB'),
     CreateUser: Symbol('CreateUser'),
     Config: Symbol('Config'),
+    QueryApplications: Symbol('QueryApplications'),
+    CreateApplication: Symbol('CreateApplication'),
 };

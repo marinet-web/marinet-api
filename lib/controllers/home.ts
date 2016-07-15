@@ -3,13 +3,14 @@ import { Controller, Get } from 'inversify-express-utils';
 import { injectable, inject } from 'inversify';
 import { PingServer,
     CreateMessagesIndex,
-    CreateUser } from '../commands';
+    CreateUser,
+    CreateApplication } from '../commands';
 
 import { TYPES } from '../types';
 import { Request, Response } from 'express';
 import { Promise } from 'es6-promise';
 
-import { User } from '../models';
+import { User, Application } from '../models';
 
 @injectable()
 @Controller('/')
@@ -17,16 +18,19 @@ export class HomeController {
     private _pingServer: PingServer;
     private _createMessagesIndex: CreateMessagesIndex;
     private _createUser: CreateUser;
+    private _createApplication: CreateApplication;
 
     /**
      *
      */
     constructor( @inject(TYPES.PingServer) pingServer: PingServer,
         @inject(TYPES.CreateMessagesIndex) createMessagesIndex: CreateMessagesIndex,
-        @inject(TYPES.CreateUser) createUser: CreateUser) {
+        @inject(TYPES.CreateUser) createUser: CreateUser,
+        @inject(TYPES.CreateApplication) createApplication: CreateApplication) {
         this._pingServer = pingServer;
         this._createMessagesIndex = createMessagesIndex;
         this._createUser = createUser;
+        this._createApplication = createApplication;
     }
 
     @Get('/')
@@ -44,11 +48,14 @@ export class HomeController {
         this._createUser.user = <User>{
             email: 'admin@marinet.me',
             name: 'Admnistrator',
-            password: 'password'
+            password: 'password',
+            permissions: ['admin']
         };
+        this._createApplication.app = <Application>{name: 'Marinet', query: 'application: marinet'}
         console.log('Starting setup');
         return Promise.all([
             this._createMessagesIndex.exec(),
-            this._createUser.exec()]);
+            this._createUser.exec(),
+            this._createApplication.exec()]);
     }
 }

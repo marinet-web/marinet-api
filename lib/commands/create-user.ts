@@ -37,7 +37,7 @@ export class CreateUser implements Command {
                 db.open();
                 db.collection('users').insert(this._user).then(user => {
                     db.close();
-                    resolver(user);
+                    resolver(user && user.ops && user.ops.length > 0 ? user.ops[0] : null);
                 }).catch(err => {
                     db.close();
                     reject(err);

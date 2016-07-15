@@ -3,7 +3,6 @@ import { Controller, InversifyExpressServer, TYPE } from 'inversify-express-util
 import { Kernel } from 'inversify';
 
 import { Client } from 'elasticsearch';
-import { client } from './lib/get-elastic-search-client';
 
 import { PingServer,
     SaveMessage,
@@ -11,9 +10,11 @@ import { PingServer,
     CreateMessagesIndex,
     LoginUser,
     GetMongoDB, 
-    CreateUser } from './lib/commands';
+    CreateUser,
+    CreateApplication } from './lib/commands';
 
-import { QueryMessages } from './lib/queries';
+import { QueryMessages,
+    QueryApplications } from './lib/queries';
 
 import { HomeController,
     MessagesController,
@@ -34,16 +35,21 @@ _kernel.bind<Controller>(TYPE.Controller).to(ApplicationController).whenTargetNa
 _kernel.bind<Controller>(TYPE.Controller).to(AccountController).whenTargetNamed(TAGS.AccountController);
 _kernel.bind<Controller>(TYPE.Controller).to(MessagesController).whenTargetNamed(TAGS.MessagesController);
 
-_kernel.bind<Client>(TYPES.Client).toConstantValue(client);
+_kernel.bind<Client>(TYPES.Client).toConstantValue(new Client({
+    host: config.elastic.url,
+    log: config.elastic.log
+}));
 _kernel.bind<PingServer>(TYPES.PingServer).to(PingServer);
 _kernel.bind<SaveMessage>(TYPES.SaveMessage).to(SaveMessage);
 _kernel.bind<QueryMessages>(TYPES.QueryMessages).to(QueryMessages);
+_kernel.bind<QueryApplications>(TYPES.QueryApplications).to(QueryApplications);
 _kernel.bind<CreateMD5>(TYPES.CreateMD5).to(CreateMD5);
 _kernel.bind<CreateMessagesIndex>(TYPES.CreateMessagesIndex).to(CreateMessagesIndex);
 _kernel.bind<LoginUser>(TYPES.LoginUser).to(LoginUser);
 _kernel.bind<GetMongoDB>(TYPES.GetMongoDB).to(GetMongoDB);
 _kernel.bind<CreateUser>(TYPES.CreateUser).to(CreateUser);
 _kernel.bind<Config>(TYPES.Config).toConstantValue(config);
+_kernel.bind<CreateApplication>(TYPES.CreateApplication).to(CreateApplication);
 
 export var kernel = _kernel;
 
