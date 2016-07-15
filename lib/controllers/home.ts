@@ -10,7 +10,7 @@ import { TYPES } from '../types';
 import { Request, Response } from 'express';
 import { Promise } from 'es6-promise';
 
-import { User, Application } from '../models';
+import { User, Application, Config } from '../models';
 
 @injectable()
 @Controller('/')
@@ -19,6 +19,7 @@ export class HomeController {
     private _createMessagesIndex: CreateMessagesIndex;
     private _createUser: CreateUser;
     private _createApplication: CreateApplication;
+    private _config: Config;
 
     /**
      *
@@ -26,11 +27,13 @@ export class HomeController {
     constructor( @inject(TYPES.PingServer) pingServer: PingServer,
         @inject(TYPES.CreateMessagesIndex) createMessagesIndex: CreateMessagesIndex,
         @inject(TYPES.CreateUser) createUser: CreateUser,
-        @inject(TYPES.CreateApplication) createApplication: CreateApplication) {
+        @inject(TYPES.CreateApplication) createApplication: CreateApplication,
+        @inject(TYPES.Config) config: Config) {
         this._pingServer = pingServer;
         this._createMessagesIndex = createMessagesIndex;
         this._createUser = createUser;
         this._createApplication = createApplication;
+        this._config = config;
     }
 
     @Get('/')
@@ -39,7 +42,7 @@ export class HomeController {
         return {
             "version": "3.0.0",
             "name": "marinet-api",
-            "env": process.env.NODE_ENV || "development"
+            "env": this._config.env
         };
     }
 

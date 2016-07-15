@@ -8,5 +8,6 @@ export interface Config{
     appSecret: string,
     originsWhitelist: [string],
     mongoUrl: string,
-    elastic: ElasticConfig
+    elastic: ElasticConfig,
+    env: string
 }

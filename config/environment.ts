@@ -8,5 +8,6 @@ export const config: Config = <Config>{
     elastic: <ElasticConfig>{
         url: process.env.SEARCHBOX_URL || 'localhost:9200',
         log: process.env.ELASTIC_LOG_LEVEL || 'trace'
-    }
+    },
+    env: process.env.NODE_ENV || "development"
 }
