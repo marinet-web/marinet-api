@@ -1,6 +1,7 @@
 import { injectable, inject } from 'inversify';
 import { Command, CreateMD5 } from './';
 import { Client, IndexDocumentParams } from 'elasticsearch';
+import { Promise } from 'es6-promise';
 
 import { Message } from '../models';
 
@@ -31,7 +32,7 @@ export class SaveMessage implements Command {
         this._md5Hash = md5Hash;
     }
 
-    public exec(): Promise {
+    public exec(): Promise<any> {
 
         let index = {
             "index": "messages",
@@ -43,20 +44,6 @@ export class SaveMessage implements Command {
         return new Promise((resolver, reject) => {
             this.getHash().then(hash => {
                 this.message.hash = hash;
-                // this._client.indices.create({
-                //     "index": "messages", "body": {
-                //         "mappings": {
-                //             "message": {
-                //                 "properties": {
-                //                     "message": {
-                //                         "type": "string",
-                //                         "index": "not_analyzed"
-                //                     }
-                //                 }
-                //             }
-                //         }
-                //     }
-                // })
                 this._client.index<Message>(<IndexDocumentParams<Message>>index)  
                 .then(result => {
                         resolver(result);

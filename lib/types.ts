@@ -7,4 +7,5 @@ export const TYPES = {
     CreateMessagesIndex: Symbol('CreateMessagesIndex'),
     LoginUser: Symbol('LoginUser'),
     GetMongoDB: Symbol('GetMongoDB'),
+    CreateUser: Symbol('CreateUser'),
 };

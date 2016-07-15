@@ -7,8 +7,10 @@ import { MessageAggregation } from '../models';
 
 import { TYPES } from '../types';
 
+import { Promise } from 'es6-promise';
+
 @injectable()
-export class QueryMessages implements Query<Promise<[Message]>> {
+export class QueryMessages implements Query<Promise<[MessageAggregation]>> {
 
     private _client: Client;
     /**
@@ -58,9 +60,9 @@ export class QueryMessages implements Query<Promise<[Message]>> {
                         message.count = element.doc_count;
                         result.push(message);
                     });
-                    return resolve(result);
+                    return resolve(<[MessageAggregation]>result);
                 }
-                return resolve([]);
+                return resolve(<[MessageAggregation]>[]);
             });
         });
     }

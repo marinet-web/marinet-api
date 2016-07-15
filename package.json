@@ -12,9 +12,11 @@
   "author": "kibiluzbad kibiluzbad@gmail.com (marinet.me)",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.0.0",
     "body-parser": "^1.15.2",
     "cors": "^2.7.1",
     "elasticsearch": "^11.0.1",
+    "es6-promise": "^3.2.1",
     "express": "^4.14.0",
     "express-jwt": "^3.4.0",
     "inversify": "^2.0.0-rc.1",

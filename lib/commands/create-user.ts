@@ -1,9 +1,11 @@
 import { injectable, inject } from 'inversify';
+import { Promise } from 'es6-promise';
 
 import { Db } from 'mongodb';
 
 import * as jwt from 'jsonwebtoken';
 import * as _ from 'lodash';
+import * as crypto from 'crypto';
 
 import { Command, GetMongoDB } from './';
 import { User } from '../models';
@@ -28,18 +30,14 @@ export class CreateUser implements Command {
         this._getMongoDB = getMongoDB;
     }
 
-    public exec(): Promise {
+    public exec(): Promise<any> {
         return new Promise((resolver, reject) => {
-            //TODO: validate user password and return user
+            this._user.password = crypto.createHash('sha512').update(this._user.password).digest('hex');
             this._getMongoDB.exec().then((db: Db) => {
                 db.open();
                 db.collection('users').insert(this._user).then(user => {
                     db.close();
-                    resolver(jwt.sign(_.omit(user, 'password'),
-                        process.env.APP_SECRET,
-                        {
-                            expiresIn: 60 * 5
-                        }));
+                    resolver(user);
                 }).catch(err => {
                     db.close();
                     reject(err);

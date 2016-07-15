@@ -20,8 +20,8 @@ export class AccountController {
   }
 
   @Get('/me')
-  public me() {
-    return 'Home sweet home';
+  public me(request: Request): User {
+    return request.user;
   }
 
   @Post('/login')

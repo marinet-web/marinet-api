@@ -1,6 +1,7 @@
 import { injectable, inject } from 'inversify';
 import { Command } from './command';
 import { Client } from 'elasticsearch';
+import { Promise } from 'es6-promise';
 
 import { TYPES } from '../types';
 
@@ -16,7 +17,7 @@ export class PingServer implements Command {
         this._client = client;
     }
 
-    public exec(): Promise {
+    public exec(): Promise<any> {
         return new Promise((resolver, reject) => {
             this._client.ping({ hello: "It works" })
             .then(resp => {

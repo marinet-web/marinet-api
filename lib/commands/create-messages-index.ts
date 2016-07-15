@@ -1,6 +1,7 @@
 import { injectable, inject } from 'inversify';
 import { Command, CreateMD5 } from './';
 import { Client, IndexDocumentParams } from 'elasticsearch';
+import { Promise } from 'es6-promise';
 
 import { Message } from '../models';
 
@@ -18,7 +19,7 @@ export class CreateMessagesIndex implements Command {
         this._client = client;
     }
 
-    public exec(): Promise {
+    public exec(): Promise<any> {
 
         return new Promise((resolver, reject) => {
             this._client.indices.create({

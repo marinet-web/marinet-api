@@ -27,6 +27,8 @@ server.setConfig((app) => {
 
         }
     }));
+    app.use(jwt({ secret: process.env.APP_SECRET})
+    .unless({path: ['/api/account/login', '/setup']}));
 });
 
 let app = server.build();

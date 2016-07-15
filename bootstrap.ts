@@ -10,7 +10,8 @@ import { PingServer,
     CreateMD5,
     CreateMessagesIndex,
     LoginUser,
-    GetMongoDB } from './lib/commands';
+    GetMongoDB, 
+    CreateUser } from './lib/commands';
 
 import { QueryMessages } from './lib/queries';
 
@@ -38,6 +39,7 @@ _kernel.bind<CreateMD5>(TYPES.CreateMD5).to(CreateMD5);
 _kernel.bind<CreateMessagesIndex>(TYPES.CreateMessagesIndex).to(CreateMessagesIndex);
 _kernel.bind<LoginUser>(TYPES.LoginUser).to(LoginUser);
 _kernel.bind<GetMongoDB>(TYPES.GetMongoDB).to(GetMongoDB);
+_kernel.bind<CreateUser>(TYPES.CreateUser).to(CreateUser);
 
 export var kernel = _kernel;
 

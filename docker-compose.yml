@@ -12,7 +12,7 @@ services:
     working_dir: /app/user
     environment:
       PORT: 3000
-      MONGOLAB_URI: 'mongolab:27017'
+      MONGOLAB_URI: 'mongodb://mongolab:27017'
       SEARCHBOX_URL: 'searchbox:9200'
       APP_SECRET: 'very secret key!'
       ORIGINS_WHITELIST: 'localhost:4200'

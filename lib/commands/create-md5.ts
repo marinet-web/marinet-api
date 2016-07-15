@@ -1,6 +1,7 @@
 import { injectable, inject } from 'inversify';
 import { Command } from './command';
 import * as md5 from 'md5';
+import { Promise } from 'es6-promise';
 
 import { TYPES } from '../types';
 
@@ -22,7 +23,7 @@ export class CreateMD5 implements Command {
      */
     constructor() { }
 
-    public exec(): Promise {
+    public exec(): Promise<any> {
         return new Promise((resolver, reject) => {
             try{
                 resolver(md5(this._value));
