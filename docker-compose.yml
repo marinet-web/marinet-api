@@ -4,6 +4,9 @@ services:
     image: mongo
   searchbox:
     image: elasticsearch
+    ports:
+      - "9300:9300"
+      - "9200:9200"
   web:
     build: .
     command: 'gulp serve'
@@ -15,6 +18,6 @@ services:
       MONGOLAB_URI: 'mongodb://mongolab:27017'
       SEARCHBOX_URL: 'searchbox:9200'
       APP_SECRET: 'very secret key!'
-      ORIGINS_WHITELIST: 'localhost:4200'
+      ORIGINS_WHITELIST: 'http://localhost:4200'
     ports:
       - "3000:3000"

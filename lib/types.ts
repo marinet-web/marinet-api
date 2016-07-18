@@ -11,4 +11,7 @@ export const TYPES = {
     Config: Symbol('Config'),
     QueryApplications: Symbol('QueryApplications'),
     CreateApplication: Symbol('CreateApplication'),
+    GetMessageByHash: Symbol('GetMessageByHash'),
+    CreateComment: Symbol('CreateComment'),
+    GetComments: Symbol('GetComments'),
 };

@@ -9,17 +9,21 @@ import { PingServer,
     CreateMD5,
     CreateMessagesIndex,
     LoginUser,
-    GetMongoDB, 
+    GetMongoDB,
     CreateUser,
-    CreateApplication } from './lib/commands';
+    CreateApplication,
+    CreateComment } from './lib/commands';
 
 import { QueryMessages,
-    QueryApplications } from './lib/queries';
+    QueryApplications,
+    GetMessageByHash,
+    GetComments } from './lib/queries';
 
 import { HomeController,
     MessagesController,
     AccountController,
-    ApplicationController } from './lib/controllers';
+    ApplicationController,
+    CommentsController } from './lib/controllers';
 
 import { TAGS } from './lib/tags';
 import { TYPES } from './lib/types';
@@ -34,11 +38,13 @@ _kernel.bind<Controller>(TYPE.Controller).to(HomeController).whenTargetNamed(TAG
 _kernel.bind<Controller>(TYPE.Controller).to(ApplicationController).whenTargetNamed(TAGS.ApplicationController);
 _kernel.bind<Controller>(TYPE.Controller).to(AccountController).whenTargetNamed(TAGS.AccountController);
 _kernel.bind<Controller>(TYPE.Controller).to(MessagesController).whenTargetNamed(TAGS.MessagesController);
+_kernel.bind<Controller>(TYPE.Controller).to(CommentsController).whenTargetNamed(TAGS.CommentsController);
 
 _kernel.bind<Client>(TYPES.Client).toConstantValue(new Client({
     host: config.elastic.url,
     log: config.elastic.log
 }));
+
 _kernel.bind<PingServer>(TYPES.PingServer).to(PingServer);
 _kernel.bind<SaveMessage>(TYPES.SaveMessage).to(SaveMessage);
 _kernel.bind<QueryMessages>(TYPES.QueryMessages).to(QueryMessages);
@@ -50,6 +56,9 @@ _kernel.bind<GetMongoDB>(TYPES.GetMongoDB).to(GetMongoDB);
 _kernel.bind<CreateUser>(TYPES.CreateUser).to(CreateUser);
 _kernel.bind<Config>(TYPES.Config).toConstantValue(config);
 _kernel.bind<CreateApplication>(TYPES.CreateApplication).to(CreateApplication);
+_kernel.bind<GetMessageByHash>(TYPES.GetMessageByHash).to(GetMessageByHash);
+_kernel.bind<GetComments>(TYPES.GetComments).to(GetComments);
+_kernel.bind<CreateComment>(TYPES.CreateComment).to(CreateComment);
 
 export var kernel = _kernel;
 
