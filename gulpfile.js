@@ -14,14 +14,9 @@ gulp.task('watch', function() {
   gulp.watch('**/*.ts', ['typescript']);
 });
 
-gulp.task('serve', ['watch'], function () {
-  //livereload.listen();
+gulp.task('serve', ['typescript', 'watch'], function () {
   nodemon({
     script: 'deploy/server.js',
     ext: 'js',
-  }).on('restart', function () {
-    // setTimeout(function () {
-    //   livereload.changed();
-    // }, 500);
-  });
+  }).on('restart', function () {});
 });

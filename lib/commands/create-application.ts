@@ -59,6 +59,10 @@ export class CreateApplication implements Command {
                         }, (err, token) => {
                             if(err) return reject(err);
                             this._app.token = token;
+                            
+                            if(!this._app.users) this._app.users = <[string]>[];
+
+                            this._app.users.push(user._id);
                             this._app.createdAt = new Date();
                             db.collection('applications').insert(this._app)
                             .then((value) =>{

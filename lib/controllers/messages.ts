@@ -7,6 +7,7 @@ import { QueryMessages,
   GetMessageByHash } from '../queries';
 
 import { TYPES } from '../types';
+import * as guard from 'express-jwt-permissions';
 
 @injectable()
 @Controller('/api')
@@ -30,19 +31,19 @@ export class MessagesController {
     this._getMessageByHash = getMessageByHash;
   }
 
-  @Post('/message')
+  @Post('/message', guard().check(['logger']))
   public save(request: Request) {
     this._saveMessage.message = request.body;
     return this._saveMessage.exec();
   }
 
-  @Get('/message/:hash')
+  @Get('/message/:hash', guard().check(['admin']))
   public get(request: Request) {
     this._getMessageByHash.hash = request.params.hash;
     return this._getMessageByHash.exec();
   }
 
-  @Get('/messages')
+  @Get('/messages', guard().check(['admin']))
   public query(request: Request) {
     this._queryApplications.userId = request.user._id;
 

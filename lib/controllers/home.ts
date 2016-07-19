@@ -55,7 +55,7 @@ export class HomeController {
             permissions: ['admin']
         };
         this._createApplication.app = <Application>{
-            name: 'Marinet',
+            name: 'marinet',
             query: 'application: marinet'
         } 
         console.log('Starting setup');

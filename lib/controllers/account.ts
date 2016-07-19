@@ -7,6 +7,8 @@ import { LoginUser } from '../commands';
 import { User } from '../models';
 import { TYPES } from '../types';
 
+import * as guard from 'express-jwt-permissions';
+
 @injectable()
 @Controller('/api/account')
 export class AccountController {
@@ -19,7 +21,7 @@ export class AccountController {
     this._loginUser = loginUser;
   }
 
-  @Get('/me')
+  @Get('/me', guard().check(['admin']))
   public me(request: Request): User {
     return request.user;
   }

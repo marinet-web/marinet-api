@@ -4,6 +4,7 @@ import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as jwt from 'express-jwt';
+import * as guard from 'express-jwt-permissions';
 
 import { kernel } from './bootstrap';
 import { config } from './config';
@@ -11,6 +12,7 @@ import { config } from './config';
 let server = new InversifyExpressServer(kernel);
 
 server.setConfig((app) => {
+
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use(morgan('combined'));
@@ -27,6 +29,7 @@ server.setConfig((app) => {
     }));
     app.use(jwt({ secret: config.appSecret})
     .unless({path: ['/api/account/login', '/setup']}));
+    //app.use(guard().check(['admin']));
 });
 
 let app = server.build();

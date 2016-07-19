@@ -17,7 +17,8 @@ import { PingServer,
 import { QueryMessages,
     QueryApplications,
     GetMessageByHash,
-    GetComments } from './lib/queries';
+    GetComments, 
+    GetApplication } from './lib/queries';
 
 import { HomeController,
     MessagesController,
@@ -59,6 +60,7 @@ _kernel.bind<CreateApplication>(TYPES.CreateApplication).to(CreateApplication);
 _kernel.bind<GetMessageByHash>(TYPES.GetMessageByHash).to(GetMessageByHash);
 _kernel.bind<GetComments>(TYPES.GetComments).to(GetComments);
 _kernel.bind<CreateComment>(TYPES.CreateComment).to(CreateComment);
+_kernel.bind<GetApplication>(TYPES.GetApplication).to(GetApplication);
 
 export var kernel = _kernel;
 

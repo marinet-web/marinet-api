@@ -19,6 +19,8 @@
     "es6-promise": "^3.2.1",
     "express": "^4.14.0",
     "express-jwt": "^3.4.0",
+    "express-jwt-permissions": "^0.2.2",
+    "express-unless": "^0.3.0",
     "inversify": "^2.0.0-rc.1",
     "inversify-express-utils": "^1.0.0-rc.2",
     "jsonwebtoken": "^7.0.1",

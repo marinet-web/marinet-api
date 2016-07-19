@@ -8,6 +8,8 @@ import { Comment } from '../models';
 import { CreateComment } from '../commands';
 import { GetComments } from '../queries';
 
+import * as guard from 'express-jwt-permissions';
+
 @injectable()
 @Controller('/api/comments')
 export class CommentsController {
@@ -23,13 +25,13 @@ export class CommentsController {
         this._getComments = getComments;
     }
 
-    @Get('/:hash')
+    @Get('/:hash', guard().check(['admin']))
     public get(request: Request) {
         this._getComments.hash = request.params.hash;
         return this._getComments.exec();
     }
 
-    @Post('/')
+    @Post('/', guard().check(['admin']))
     public post(request: Request) {
         console.log(request.body);
         this._createComment.comment = request.body;

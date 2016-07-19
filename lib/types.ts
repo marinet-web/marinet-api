@@ -14,4 +14,5 @@ export const TYPES = {
     GetMessageByHash: Symbol('GetMessageByHash'),
     CreateComment: Symbol('CreateComment'),
     GetComments: Symbol('GetComments'),
+    GetApplication: Symbol('GetApplication'),
 };
