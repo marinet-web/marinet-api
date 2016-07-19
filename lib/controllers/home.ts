@@ -60,7 +60,7 @@ export class HomeController {
         } 
         console.log('Starting setup');
         return this._createUser.exec().then(user => {
-            this._createApplication.app.users = [user._id];
+            this._createApplication.app.users = [user._id.toString()];
             return Promise.all([
                 this._createMessagesIndex.exec(),
                 this._createApplication.exec()]);

@@ -35,9 +35,7 @@ export class QueryApplications implements Query<Promise<[Application]>> {
         return new Promise<[Application]>((resolver, reject) => {
             this._getMongo.exec().then((db: Db) => {
                 let cursor = db.collection('applications').find({
-                    "users": {
-                        "$all": [new ObjectID(this._userId)]
-                    }
+                    "users": this._userId
                 });
 
                 let arr: [Application]= <[Application]>[];

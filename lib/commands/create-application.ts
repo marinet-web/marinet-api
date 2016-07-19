@@ -62,7 +62,7 @@ export class CreateApplication implements Command {
                             
                             if(!this._app.users) this._app.users = <[string]>[];
 
-                            this._app.users.push(user._id);
+                            this._app.users.push(user._id.toString());
                             this._app.createdAt = new Date();
                             db.collection('applications').insert(this._app)
                             .then((value) =>{

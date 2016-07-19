@@ -2,6 +2,7 @@
 import { Controller, Get, Post, Delete } from 'inversify-express-utils';
 import { injectable, inject } from 'inversify';
 import { Request } from 'express';
+import { ObjectID } from 'mongodb';
 
 import { TYPES } from '../types';
 import { CreateApplication } from '../commands';
@@ -42,6 +43,7 @@ export class ApplicationController {
 
   @Post('/', guard().check(['admin']))
   public post(request: Request) {
+    console.log('Create app ==================');
     this._createApplication.app = request.body;
     this._createApplication.app.users = [request.user._id];
     this._createApplication.app.createdAt = new Date();
