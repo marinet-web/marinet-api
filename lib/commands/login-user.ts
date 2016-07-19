@@ -41,9 +41,9 @@ export class LoginUser implements Command {
             .digest('hex');
 
             this._getMongoDB.exec().then((db: Db) => {
-                db.open();
+                
                 db.collection('users').findOne(this._user).then(user => {
-                    db.close();
+                    if(!user) return reject('invalid_user');
                     jwt.sign(_.omit(user, 'password'),
                         this._config.appSecret,
                         {
@@ -52,7 +52,6 @@ export class LoginUser implements Command {
                             resolver(result);
                         });
                 }).catch(err => {
-                    db.close();
                     reject(err);
                 });
             });
