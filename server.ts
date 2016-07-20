@@ -28,7 +28,7 @@ server.setConfig((app) => {
         }
     }));
     app.use(jwt({ secret: config.appSecret})
-    .unless({path: ['/api/account/login', '/setup']}));
+    .unless({path: ['/api/account/login', '/setup', '/']}));
     
 });
 

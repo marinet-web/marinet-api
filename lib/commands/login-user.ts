@@ -47,7 +47,7 @@ export class LoginUser implements Command {
                     jwt.sign(_.omit(user, 'password'),
                         this._config.appSecret,
                         {
-                            expiresIn: 60 * 5
+                            expiresIn: "2h"
                         }, (err, result) => {
                             resolver(result);
                         });
