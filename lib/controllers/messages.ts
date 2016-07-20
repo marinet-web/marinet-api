@@ -46,8 +46,9 @@ export class MessagesController {
   @Get('/messages', guard().check(['admin']))
   public query(request: Request) {
     this._queryApplications.userId = request.user._id;
-
+    
     return this._queryApplications.exec().then((app) => {
+      this._queryMessages.term = request.query.q;
       this._queryMessages.streamFilter = app[0].query;
       return this._queryMessages.exec()
     })

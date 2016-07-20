@@ -18,7 +18,8 @@ import { QueryMessages,
     QueryApplications,
     GetMessageByHash,
     GetComments, 
-    GetApplication } from './lib/queries';
+    GetApplication,
+    QueryParser } from './lib/queries';
 
 import { HomeController,
     MessagesController,
@@ -61,6 +62,7 @@ _kernel.bind<GetMessageByHash>(TYPES.GetMessageByHash).to(GetMessageByHash);
 _kernel.bind<GetComments>(TYPES.GetComments).to(GetComments);
 _kernel.bind<CreateComment>(TYPES.CreateComment).to(CreateComment);
 _kernel.bind<GetApplication>(TYPES.GetApplication).to(GetApplication);
+_kernel.bind<QueryParser>(TYPES.QueryParser).to(QueryParser);
 
 export var kernel = _kernel;
 

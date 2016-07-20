@@ -1,7 +1,8 @@
 import { injectable, inject } from 'inversify';
-import { Query } from './query';
+import { Query, QueryParser } from './';
 import { Client, SearchParams } from 'elasticsearch';
 import { Observable } from 'rxjs';
+import * as _ from 'lodash';
 
 import { MessageAggregation, QueryResult } from '../models';
 
@@ -14,10 +15,20 @@ export class QueryMessages implements Query<Promise<QueryResult<MessageAggregati
 
     private _client: Client;
     private _streamFilter: string;
+    private _parser: QueryParser;
+    private _term: string;
+
+    public get term(): string {
+        return this._term;
+    }
+    public set term(v: string) {
+        this._term = v;
+    }
 
     public get streamFilter(): string {
         return this._streamFilter;
     }
+
     public set streamFilter(v: string) {
         this._streamFilter = v;
     }
@@ -26,8 +37,10 @@ export class QueryMessages implements Query<Promise<QueryResult<MessageAggregati
     /**
      *
      */
-    constructor( @inject(TYPES.Client) client: Client) {
+    constructor( @inject(TYPES.Client) client: Client,
+        @inject(TYPES.QueryParser) parser: QueryParser) {
         this._client = client;
+        this._parser = parser;
     }
 
     public exec(): Promise<QueryResult<MessageAggregation>> {
@@ -56,19 +69,30 @@ export class QueryMessages implements Query<Promise<QueryResult<MessageAggregati
                             }
                         }
                     }
-
+                },
+                "query": {
+                    "filtered": {}
                 }
             }
         };
 
+        let query = this._parser.parse(this.term);
+
         if (json) {
-            params.body.query = {
-                "bool": {
-                    "filter": {
-                        "term": json
-                    }
+            let filter = {
+                "filter": {
+                    "term": json
                 }
-            }
+            };
+            params.body.query.filtered = _.merge(params.body.query.filtered, filter);
+
+        }
+
+        if (query) {
+            params.suggestField = "exception";
+            params.suggestSize = 5;
+            params.suggestText = this.term;
+            params.body.query.filtered = _.merge(params.body.query.filtered, query);
         }
 
 
@@ -77,6 +101,7 @@ export class QueryMessages implements Query<Promise<QueryResult<MessageAggregati
                 if (err) return reject(err);
                 //TODO: Use msearch to get total size
                 let count: number = 0;
+                let suggestions: [string] = <[string]>[];
                 if (resp && resp.hits && resp.aggregations) {
                     let result: MessageAggregation[] = [];
 
@@ -89,12 +114,20 @@ export class QueryMessages implements Query<Promise<QueryResult<MessageAggregati
                         count++;
                         result.push(message);
                     });
+
+                    if (resp.suggest && resp.suggest.exception) {
+                        resp.suggest.exception.forEach((suggestion) => {
+                            suggestion.options.forEach((option) => {
+                                suggestions.push(option.text);
+                            });
+                        })
+                    }
                     return resolve(<QueryResult<MessageAggregation>>{
                         currentPage: 1,
                         totalPages: 1,
                         totalSize: count,
                         sort: 0,
-                        suggestions: [],
+                        suggestions: suggestions,
                         data: result
                     });
                 }

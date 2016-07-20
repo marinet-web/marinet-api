@@ -15,4 +15,5 @@ export const TYPES = {
     CreateComment: Symbol('CreateComment'),
     GetComments: Symbol('GetComments'),
     GetApplication: Symbol('GetApplication'),
+    QueryParser: Symbol('QueryParser'),
 };
