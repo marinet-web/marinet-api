@@ -22,7 +22,6 @@ export class SaveMessage implements Command {
         this._message = v;
     }
 
-
     /**
      *
      */
@@ -34,31 +33,34 @@ export class SaveMessage implements Command {
 
     public exec(): Promise<any> {
 
-        let index = {
-            "index": "messages",
-            "type": "message",
-            "body": this.message,
-
-        };
-
         return new Promise((resolver, reject) => {
             this.getHash().then(hash => {
-                this.message.hash = hash;
-                this._client.index<Message>(<IndexDocumentParams<Message>>index)  
-                .then(result => {
+                this.message.count = 1;
+                let index = {
+                    "index": "messages",
+                    "type": "message",
+                    "body": {
+                        "script": "ctx._source.count += 1",
+                        "upsert": this.message
+                    },
+                    "id": hash
+                };
+
+                this._client.update(index)
+                    .then(result => {
                         resolver(result);
                     }, err => {
                         reject(err);
                     });
-                
-                  
+
+
             }, err => reject(err));
 
         });
     }
 
     private getHash() {
-        this._md5Hash.value = this.message.message + this.message.stackTrace + this.message.application + this.message.environment
+        this._md5Hash.value = this.message.message + this.message.stackTrace + this.message.application + this.message.environment + this.message.level
         return this._md5Hash.exec();
     }
 }

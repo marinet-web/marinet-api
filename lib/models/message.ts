@@ -2,8 +2,7 @@ export interface Message{
     id: string;
     count: number;
     message: string;
-    type: string;
+    level: string;
     application: string;
-    hash: string;
     createdAt: Date;
 }

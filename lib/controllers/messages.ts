@@ -49,6 +49,7 @@ export class MessagesController {
     
     return this._queryApplications.exec().then((app) => {
       this._queryMessages.term = request.query.q;
+      this._queryMessages.page = request.query.page;
       this._queryMessages.streamFilter = app[0].query;
       return this._queryMessages.exec()
     })

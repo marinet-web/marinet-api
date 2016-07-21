@@ -4,19 +4,20 @@ import { Client, SearchParams } from 'elasticsearch';
 import { Observable } from 'rxjs';
 import * as _ from 'lodash';
 
-import { MessageAggregation, QueryResult } from '../models';
+import { Message, QueryResult } from '../models';
 
 import { TYPES } from '../types';
 
 import { Promise } from 'es6-promise';
 
 @injectable()
-export class QueryMessages implements Query<Promise<QueryResult<MessageAggregation>>> {
+export class QueryMessages implements Query<Promise<QueryResult<Message>>> {
 
     private _client: Client;
     private _streamFilter: string;
     private _parser: QueryParser;
     private _term: string;
+    private _page : number;
 
     public get term(): string {
         return this._term;
@@ -32,7 +33,13 @@ export class QueryMessages implements Query<Promise<QueryResult<MessageAggregati
     public set streamFilter(v: string) {
         this._streamFilter = v;
     }
-
+    
+    public get page() : number {
+        return this._page || 1;
+    }
+    public set page(v : number) {
+        this._page = v;
+    }
 
     /**
      *
@@ -43,33 +50,19 @@ export class QueryMessages implements Query<Promise<QueryResult<MessageAggregati
         this._parser = parser;
     }
 
-    public exec(): Promise<QueryResult<MessageAggregation>> {
+    public exec(): Promise<QueryResult<Message>> {
 
         let json = this.streamFilter
             ? JSON.parse(this.parse(this.streamFilter))
             : null;
 
+        let pageSize: number = 10;
+
         let params: any = {
             "index": "messages",
-            "size": 0,
+            "from": ((this.page) - 1) * pageSize,
+            "size": pageSize,
             "body": {
-                "aggs": {
-                    "same_messages": {
-                        "terms": { "field": "hash" },
-                        "aggs": {
-                            "message": {
-                                "terms": {
-                                    "field": "message"
-                                }
-                            },
-                            "datetime": {
-                                "terms": {
-                                    "field": "createdAt"
-                                }
-                            }
-                        }
-                    }
-                },
                 "query": {
                     "filtered": {}
                 }
@@ -95,23 +88,18 @@ export class QueryMessages implements Query<Promise<QueryResult<MessageAggregati
             params.body.query.filtered = _.merge(params.body.query.filtered, query);
         }
 
-
-        return new Promise<QueryResult<MessageAggregation>>((resolve, reject) => {
+        return new Promise<QueryResult<Message>>((resolve, reject) => {
             this._client.search(params, (err, resp) => {
                 if (err) return reject(err);
                 //TODO: Use msearch to get total size
                 let count: number = 0;
                 let suggestions: [string] = <[string]>[];
-                if (resp && resp.hits && resp.aggregations) {
-                    let result: MessageAggregation[] = [];
+                if (resp && resp.hits) {
+                    count = resp.hits.total;
+                    let result: Message[] = [];
 
-                    resp.aggregations.same_messages.buckets.forEach(element => {
-                        let message: MessageAggregation = <MessageAggregation>{};
-                        message.hash = element.key;
-                        message.message = element.message.buckets[0].key;
-                        message.createdAt = element.datetime.buckets[0].key_as_string;
-                        message.count = element.doc_count;
-                        count++;
+                    resp.hits.hits.forEach(element => {
+                        let message: Message = <Message> element._source;
                         result.push(message);
                     });
 
@@ -122,17 +110,17 @@ export class QueryMessages implements Query<Promise<QueryResult<MessageAggregati
                             });
                         })
                     }
-                    return resolve(<QueryResult<MessageAggregation>>{
-                        currentPage: 1,
-                        totalPages: 1,
+                    return resolve(<QueryResult<Message>>{
+                        currentPage: this.page,
+                        totalPages: Math.ceil(count / pageSize),
                         totalSize: count,
                         sort: 0,
                         suggestions: suggestions,
                         data: result
                     });
                 }
-                return resolve(<QueryResult<MessageAggregation>>{
-                    currentPage: 1,
+                return resolve(<QueryResult<Message>>{
+                    currentPage: this.page,
                     totalPages: 1,
                     totalSize: 0,
                     sort: 0,
