@@ -100,6 +100,7 @@ export class QueryMessages implements Query<Promise<QueryResult<Message>>> {
 
                     resp.hits.hits.forEach(element => {
                         let message: Message = <Message> element._source;
+                        message.id = element._id;
                         result.push(message);
                     });
 

@@ -33,27 +33,16 @@ export class GetMessageByHash implements Query<Promise<Message>> {
 
         let params: any = {
             "index": "messages",
-            "size": 1,
-            "body": {
-                "query": {
-                    "bool": {
-                        "filter": {
-                            "term": { "hash": this.hash }
-                        }
-                    }
-                }
-            }
+            "type": "message",
+            "id": this.hash
         };
 
         return new Promise<Message>((resolve, reject) => {
-            this._client.search(params, (err, resp) => {
+            this._client.get(params, (err, resp) => {
                 if (err) return reject(err);
-                if (resp && resp.hits) {
-                    let message: Message;
-                    resp.hits.hits.forEach(element => {
-                        message = <Message>element._source;
-                        message.count = resp.hits.total;
-                    });
+                if (resp.found) {
+                    let message: Message = <Message>resp._source;
+                    message.id = resp._id;
                     return resolve(message);
                 }
                 return resolve(null);
