@@ -33,12 +33,14 @@
     "rxjs": "^5.0.0-beta.10"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "gulp": "^3.9.1",
     "gulp-livereload": "^3.8.1",
     "gulp-nodemon": "^2.1.0",
     "gulp-typescript": "^2.13.6",
     "inversify-dts": "^1.4.0",
     "jshint": "^2.9.2",
+    "mocha": "^2.5.3",
     "tslint": "^3.13.0"
   }
 }

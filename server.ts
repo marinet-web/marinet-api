@@ -1,13 +1,17 @@
 import 'reflect-metadata';
 import { Controller, InversifyExpressServer, TYPE } from 'inversify-express-utils';
+import { Kernel } from 'inversify';
 import * as morgan from 'morgan';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as jwt from 'express-jwt';
 import * as guard from 'express-jwt-permissions';
 
-import { kernel } from './bootstrap';
+import { commands, controllers, infra, queries } from './bootstrap';
 import { config } from './config';
+
+let kernel = new Kernel();
+kernel.load(infra, commands, queries, controllers);
 
 let server = new InversifyExpressServer(kernel);
 

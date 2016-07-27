@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
 import { Command } from './command';
-import * as md5 from 'md5';
+import md5 = require('md5');
 import { Promise } from 'es6-promise';
 
 import { TYPES } from '../types';
