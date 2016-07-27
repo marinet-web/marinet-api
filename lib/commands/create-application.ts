@@ -49,8 +49,10 @@ export class CreateApplication implements Command {
             }
             this._createUser.exec()
             .then((user) => {
+                
                 return this._getMongoDB.exec()
                 .then((db) => {
+                    
                     //TODO: Create a token command
                     jwt.sign(_.omit(user, 'password'),
                         this._config.appSecret,
@@ -58,12 +60,14 @@ export class CreateApplication implements Command {
                             expiresIn: '1000y'
                         }, (err, token) => {
                             if(err) return reject(err);
+                            
                             this._app.token = token;
                             
                             if(!this._app.users) this._app.users = <[string]>[];
 
                             this._app.users.push(user._id.toString());
                             this._app.createdAt = new Date();
+                            
                             db.collection('applications').insert(this._app)
                             .then((value) =>{
                                 resolver(value && value.ops && 0 < value.ops.length 

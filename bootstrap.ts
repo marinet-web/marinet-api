@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Controller, InversifyExpressServer, TYPE } from 'inversify-express-utils';
-import { KernelModule, Bind } from 'inversify';
+import { KernelModule } from 'inversify';
 
 import { Client } from 'elasticsearch';
 
@@ -33,7 +33,7 @@ import { TYPES } from './lib/types';
 import { config } from './config';
 import { Config } from './lib/models';
 
-let controllers = new KernelModule((bind: Bind) => {
+let controllers = new KernelModule((bind) => {
     bind<Controller>(TYPE.Controller).to(HomeController).whenTargetNamed(TAGS.HomeController);
     bind<Controller>(TYPE.Controller).to(ApplicationController).whenTargetNamed(TAGS.ApplicationController);
     bind<Controller>(TYPE.Controller).to(AccountController).whenTargetNamed(TAGS.AccountController);
@@ -41,7 +41,7 @@ let controllers = new KernelModule((bind: Bind) => {
     bind<Controller>(TYPE.Controller).to(CommentsController).whenTargetNamed(TAGS.CommentsController);
 });
 
-let queries = new KernelModule((bind: Bind) => {
+let queries = new KernelModule((bind) => {
     bind<QueryMessages>(TYPES.QueryMessages).to(QueryMessages);
     bind<QueryApplications>(TYPES.QueryApplications).to(QueryApplications);
     bind<GetMessageByHash>(TYPES.GetMessageByHash).to(GetMessageByHash);
@@ -50,7 +50,7 @@ let queries = new KernelModule((bind: Bind) => {
     bind<QueryParser>(TYPES.QueryParser).to(QueryParser);
 });
 
-let commands = new KernelModule((bind: Bind) => {
+let commands = new KernelModule((bind) => {
     bind<PingServer>(TYPES.PingServer).to(PingServer);
     bind<SaveMessage>(TYPES.SaveMessage).to(SaveMessage);
     bind<CreateMD5>(TYPES.CreateMD5).to(CreateMD5);
@@ -61,7 +61,7 @@ let commands = new KernelModule((bind: Bind) => {
     bind<CreateComment>(TYPES.CreateComment).to(CreateComment);
 });
 
-let infra = new KernelModule((bind: Bind) => {
+let infra = new KernelModule((bind) => {
     bind<Client>(TYPES.Client).toConstantValue(new Client({
         host: config.elastic.url,
         log: config.elastic.log

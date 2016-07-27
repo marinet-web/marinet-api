@@ -1,3 +1,6 @@
 --require ts-node/register
 --watch-extensions tsx,ts
+--recursive
+-R nyan
+--ui bdd
 **/*.spec.ts

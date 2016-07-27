@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "chai": "registry:npm/chai#3.5.0+20160723033700",
+    "chai-as-promised": "registry:npm/chai-as-promised#5.1.0+20160310030142",
     "cors": "registry:npm/cors#2.7.0+20160505024722",
     "es6-promise": "registry:npm/es6-promise#3.0.0+20160211003958",
     "jsonwebtoken": "registry:npm/jsonwebtoken#5.5.4+20160208220328",

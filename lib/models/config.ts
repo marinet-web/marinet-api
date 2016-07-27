@@ -1,9 +1,9 @@
-export interface ElasticConfig {
+interface ElasticConfig {
     url: string,
     log: string
 }
 
-export interface Config{
+interface Config{
     appPort: number;
     appSecret: string,
     originsWhitelist: [string],
@@ -11,3 +11,5 @@ export interface Config{
     elastic: ElasticConfig,
     env: string
 }
+
+export { ElasticConfig, Config }

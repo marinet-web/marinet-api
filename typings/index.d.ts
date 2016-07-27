@@ -14,6 +14,7 @@
 /// <reference path="globals/node/index.d.ts" />
 /// <reference path="globals/reflect-metadata/index.d.ts" />
 /// <reference path="globals/serve-static/index.d.ts" />
+/// <reference path="modules/chai-as-promised/index.d.ts" />
 /// <reference path="modules/chai/index.d.ts" />
 /// <reference path="modules/cors/index.d.ts" />
 /// <reference path="modules/es6-promise/index.d.ts" />

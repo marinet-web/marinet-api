@@ -16,7 +16,7 @@ const expect = chai.expect;
 chai.use(chaiAsPromised);
 
 
-describe('Create application command', () => {
+describe('Create comment command', () => {
 
     let createUser: TypeMoq.Mock<CreateUser>;
     let getMongoDb: TypeMoq.Mock<GetMongoDB>;
@@ -31,7 +31,6 @@ describe('Create application command', () => {
     });
 
     describe('When calling exec()', () => {
-
         let app: Application;
         let config = <Config>{ appSecret: "secret" };
 
@@ -62,61 +61,8 @@ describe('Create application command', () => {
             createUser.setup(c => c.exec()).returns(() => Promise.resolve(user));
         });
 
-        it('should return application created', () => {
-
-            app = <Application>{
-                name: "appName",
-                query: "application: appName",
-                users: ["userId"]
-            };
-
-            let command = new CreateApplication(getMongoDb.object, createUser.object, config);
-
-            command.app = app;
-            return expect(command.exec()).eventually.to.have.property('name').eq(app.name);
+        it('should return comment created', () => {
+            expect.fail();
         });
-
-        it('should set application token', () => {
-
-            app = <Application>{
-                name: "appName",
-                query: "application: appName",
-                users: ["userId"]
-            };
-
-            let command = new CreateApplication(getMongoDb.object, createUser.object, config);
-
-            command.app = app;
-            return expect(command.exec()).eventually.to.have.property('token').ok;
-        });
-
-        it('should set creation date', () => {
-
-            app = <Application>{
-                name: "appName",
-                query: "application: appName",
-                users: ["userId"]
-            };
-
-            let command = new CreateApplication(getMongoDb.object, createUser.object, config);
-
-            command.app = app;
-            return expect(command.exec()).to.eventually.have.property('createdAt').ok;
-        });
-
-        describe("App property is null", () => {
-            it('should throws', () => {
-
-                app = undefined;
-
-                let command = new CreateApplication(getMongoDb.object, createUser.object, config);
-
-                command.app = app;
-                return expect(command.exec()).to.be.rejected;
-            });
-        });
-
     });
 });
-
-
