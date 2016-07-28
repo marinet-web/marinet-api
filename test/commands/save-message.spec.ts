@@ -2,67 +2,115 @@
 import 'reflect-metadata';
 import * as TypeMoq from "typemoq";
 import { Promise } from 'es6-promise';
-import { Db, Server, Collection, InsertOneWriteOpResult, ObjectID } from "mongodb";
+
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import { Kernel } from 'inversify';
+import { Client, IndexDocumentParams, Indices } from 'elasticsearch';
 
-import { CreateApplication, CreateUser, GetMongoDB } from '../../lib/commands';
-import { Config, Application, User } from '../../lib/models';
-import { TYPES } from '../../lib/types';
-
+import { SaveMessage, CreateMD5 } from '../../lib/commands';
+import { Config, Message } from '../../lib/models';
 
 const expect = chai.expect;
 chai.use(chaiAsPromised);
 
-
 describe('Save message command', () => {
 
-    let createUser: TypeMoq.Mock<CreateUser>;
-    let getMongoDb: TypeMoq.Mock<GetMongoDB>;
-    let server: TypeMoq.Mock<Server>;
-    let db: TypeMoq.Mock<Db>;
+    let createMD5: TypeMoq.Mock<CreateMD5>;
+    let client: Client;
 
     beforeEach(() => {
-        createUser = TypeMoq.Mock.ofType(CreateUser);
-        getMongoDb = TypeMoq.Mock.ofType(GetMongoDB);
-        server = TypeMoq.Mock.ofType(Server, TypeMoq.MockBehavior.Loose, 'localhost', 27017);
-        db = TypeMoq.Mock.ofType(Db, TypeMoq.MockBehavior.Loose, 'dbname', server.object);
+        createMD5 = TypeMoq.Mock.ofType(CreateMD5);
     });
 
     describe('When calling exec()', () => {
-        let app: Application;
+        let message: Message;
         let config = <Config>{ appSecret: "secret" };
 
         beforeEach(() => {
+            message = <Message>{
+                message: "Error test! Try not to catch this!",
+                exception: "Error: Error test! Try to catch this!",
+                createdAt: new Date("2016-07-06T22:02:11.000Z"),
+                level: "error",
+                application: "marinet"
+            };
+            createMD5.setup(c => c.exec())
+                .returns(() => Promise.resolve('5decaa03cef9c304868860ee8d26549f'));
 
-            let collection = <Collection>{
-                insert: (param) => {
-                    return Promise.resolve(<InsertOneWriteOpResult>{
-                        ops: [param]
-                    });
+            client = <Client>{
+                update: (params) => {
+                    return {
+                        then: (result, err) => {
+                            result({
+                                "_index": "messages",
+                                "_type": "message",
+                                "_id": "5decaa03cef9c304868860ee8d26549f",
+                                "_version": 1,
+                                "_shards": {
+                                    "total": 2,
+                                    "successful": 2,
+                                    "failed": 0
+                                }
+                            })
+                        }
+                    };
                 }
-            };
-
-            let user = <User>{
-                _id: new ObjectID(),
-                name: 'user_appName',
-                email: 'user@appName',
-                password: 'password',
-                permissions: ['logger']
-            };
-
-
-            db.setup(c => c.collection(TypeMoq.It.isAnyString())).returns(() => collection);
-
-            getMongoDb.setup(c => c.exec())
-                .returns(() => Promise.resolve(db.object));
-
-            createUser.setup(c => c.exec()).returns(() => Promise.resolve(user));
+            }
         });
 
-        it('should return message saved', () => {
-            //expect.fail();
+        it('should return ok', () => {
+            let command = new SaveMessage(client, createMD5.object);
+            command.message = message;
+            return expect(command.exec()).to.eventually.be.ok;
+        });
+
+        describe('If hash already exists', () => {
+
+            beforeEach(() => {
+                client = <Client>{
+                    update: (params) => {
+                        return {
+                            then: (result, err) => {
+                                result({
+                                    "_index": "messages",
+                                    "_type": "message",
+                                    "_id": "5decaa03cef9c304868860ee8d26549f",
+                                    "_version": 2,
+                                    "_shards": {
+                                        "total": 2,
+                                        "successful": 2,
+                                        "failed": 0
+                                    }
+                                })
+                            }
+                        };
+                    }
+                }
+            });
+
+            it('should increase message count', () => {
+                let command = new SaveMessage(client, createMD5.object);
+                command.message = message;
+                return expect(command.exec()).to.eventually.have.property('_version').eq(2);
+            });
+        });
+
+        describe('If message is undefined', () => {
+            it('should throw', () => {
+                message = undefined;
+                let command = new SaveMessage(client, createMD5.object);
+                command.message = message;
+                return expect(command.exec()).to.be.rejected;
+            });
+        });
+
+         describe('If message is empty', () => {
+            it('should throw', () => {
+                message = <Message>{};
+                let command = new SaveMessage(client, createMD5.object);
+                command.message = message;
+                return expect(command.exec()).to.be.rejected;
+            });
         });
     });
 });

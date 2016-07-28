@@ -32,7 +32,7 @@ export class SaveMessage implements Command {
     }
 
     public exec(): Promise<any> {
-
+        if(!this.message || Object.keys(this.message).length === 0) return Promise.reject('Message cannot be undefined or empty.'); 
         return new Promise((resolver, reject) => {
             this.getHash().then(hash => {
                 this.message.count = 1;

@@ -20,7 +20,7 @@ export class CreateMessagesIndex implements Command {
     }
 
     public exec(): Promise<any> {
-
+        
         return new Promise((resolver, reject) => {
             this._client.indices.create({
                 "index": "messages", "body": {
