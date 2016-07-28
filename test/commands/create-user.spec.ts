@@ -5,11 +5,9 @@ import { Promise } from 'es6-promise';
 import { Db, Server, Collection, InsertOneWriteOpResult, ObjectID } from "mongodb";
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import { Kernel } from 'inversify';
 
 import { CreateApplication, CreateUser, GetMongoDB } from '../../lib/commands';
-import { Config, Application, User } from '../../lib/models';
-import { TYPES } from '../../lib/types';
+import { Config, User } from '../../lib/models';
 
 
 const expect = chai.expect;
@@ -18,51 +16,78 @@ chai.use(chaiAsPromised);
 
 describe('Create user command', () => {
 
-    let createUser: TypeMoq.Mock<CreateUser>;
     let getMongoDb: TypeMoq.Mock<GetMongoDB>;
     let server: TypeMoq.Mock<Server>;
     let db: TypeMoq.Mock<Db>;
 
     beforeEach(() => {
-        createUser = TypeMoq.Mock.ofType(CreateUser);
         getMongoDb = TypeMoq.Mock.ofType(GetMongoDB);
         server = TypeMoq.Mock.ofType(Server, TypeMoq.MockBehavior.Loose, 'localhost', 27017);
         db = TypeMoq.Mock.ofType(Db, TypeMoq.MockBehavior.Loose, 'dbname', server.object);
     });
 
     describe('When calling exec()', () => {
-        let app: Application;
+        let user: User;
         let config = <Config>{ appSecret: "secret" };
 
         beforeEach(() => {
 
+            user = <User>{
+                name: 'User Name',
+                password: 'mypassword',
+                permissions: ['admin'],
+                email: 'user@mail.com'
+            };
+
             let collection = <Collection>{
                 insert: (param) => {
+                    param._id = new ObjectID();
                     return Promise.resolve(<InsertOneWriteOpResult>{
                         ops: [param]
                     });
                 }
             };
 
-            let user = <User>{
-                _id: new ObjectID(),
-                name: 'user_appName',
-                email: 'user@appName',
-                password: 'password',
-                permissions: ['logger']
-            };
-
-
             db.setup(c => c.collection(TypeMoq.It.isAnyString())).returns(() => collection);
 
             getMongoDb.setup(c => c.exec())
                 .returns(() => Promise.resolve(db.object));
-
-            createUser.setup(c => c.exec()).returns(() => Promise.resolve(user));
         });
 
         it('should return user created', () => {
-            //expect.fail();
+
+            let command = new CreateUser(getMongoDb.object);
+            command.user = user;
+            return expect(command.exec()).to.eventually.satisfy((value) => {
+                return value.name === user.name &&
+                    value.permissions === user.permissions &&
+                    value.email === user.email;
+            });
+        });
+
+        it('should encrypt password', () => {
+            let password = user.password;
+            let command = new CreateUser(getMongoDb.object);
+            command.user = user;
+            return expect(command.exec()).to.eventually.have.property('password').not.eq(password);
+        });
+
+        describe('With undefined user', () => {
+            it('should throw', () => {
+                user = undefined;
+                let command = new CreateUser(getMongoDb.object);
+                command.user = user;
+                return expect(command.exec()).to.be.rejected;
+            });
+        });
+
+        describe('With empty user', () => {
+            it('should throw', () => {
+                user = <User>{};
+                let command = new CreateUser(getMongoDb.object);
+                command.user = user;
+                return expect(command.exec()).to.be.rejected;
+            });
         });
     });
 });
