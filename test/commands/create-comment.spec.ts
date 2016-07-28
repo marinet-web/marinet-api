@@ -7,8 +7,8 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import { Kernel } from 'inversify';
 
-import { CreateApplication, CreateUser, GetMongoDB } from '../../lib/commands';
-import { Config, Application, User } from '../../lib/models';
+import { CreateComment, GetMongoDB } from '../../lib/commands';
+import { Config, Comment } from '../../lib/models';
 import { TYPES } from '../../lib/types';
 
 
@@ -18,38 +18,29 @@ chai.use(chaiAsPromised);
 
 describe('Create comment command', () => {
 
-    let createUser: TypeMoq.Mock<CreateUser>;
     let getMongoDb: TypeMoq.Mock<GetMongoDB>;
     let server: TypeMoq.Mock<Server>;
     let db: TypeMoq.Mock<Db>;
 
     beforeEach(() => {
-        createUser = TypeMoq.Mock.ofType(CreateUser);
         getMongoDb = TypeMoq.Mock.ofType(GetMongoDB);
         server = TypeMoq.Mock.ofType(Server, TypeMoq.MockBehavior.Loose, 'localhost', 27017);
         db = TypeMoq.Mock.ofType(Db, TypeMoq.MockBehavior.Loose, 'dbname', server.object);
     });
 
     describe('When calling exec()', () => {
-        let app: Application;
+        let comment: Comment;
         let config = <Config>{ appSecret: "secret" };
 
         beforeEach(() => {
 
             let collection = <Collection>{
                 insert: (param) => {
+                    param._id = new ObjectID();
                     return Promise.resolve(<InsertOneWriteOpResult>{
                         ops: [param]
                     });
                 }
-            };
-
-            let user = <User>{
-                _id: new ObjectID(),
-                name: 'user_appName',
-                email: 'user@appName',
-                password: 'password',
-                permissions: ['logger']
             };
 
 
@@ -57,12 +48,65 @@ describe('Create comment command', () => {
 
             getMongoDb.setup(c => c.exec())
                 .returns(() => Promise.resolve(db.object));
-
-            createUser.setup(c => c.exec()).returns(() => Promise.resolve(user));
         });
 
         it('should return comment created', () => {
-            //expect.fail();
+            comment = <Comment>{
+                hash: 'message-hash',
+                message: 'Test message',
+                userEmail: 'user@email.com',
+                userName: 'User Name',
+                userRole: 'UserRole'
+            };
+            let command = new CreateComment(getMongoDb.object);
+            command.comment = comment;
+            return expect(command.exec()).to.eventually.be.ok;
+        });
+
+        it('should set createdAt date', () => {
+            comment = <Comment>{
+                hash: 'message-hash',
+                message: 'Test message',
+                userEmail: 'user@email.com',
+                userName: 'User Name',
+                userRole: 'UserRole'
+            };
+            let command = new CreateComment(getMongoDb.object);
+            command.comment = comment;
+            return expect(command.exec()).to.eventually.have.property('createdAt').ok;
+        });
+
+        it('should set _id property', () => {
+            comment = <Comment>{
+                hash: 'message-hash',
+                message: 'Test message',
+                userEmail: 'user@email.com',
+                userName: 'User Name',
+                userRole: 'UserRole'
+            };
+            let command = new CreateComment(getMongoDb.object);
+            command.comment = comment;
+            return expect(command.exec()).to.eventually.have.property('_id').ok;
+        });
+
+        describe('With an undefined comment obj', () => {
+            it('should throw', () => {
+                comment = undefined;
+                let command = new CreateComment(getMongoDb.object);
+                command.comment = comment;
+                return expect(command.exec()).to.be.rejected;
+            });
+
+        });
+
+        describe('With an empty comment obj', () => {
+            it('should throw', () => {
+                comment = <Comment>{};
+                let command = new CreateComment(getMongoDb.object);
+                command.comment = comment;
+                return expect(command.exec()).to.be.rejected;
+            });
+
         });
     });
 });

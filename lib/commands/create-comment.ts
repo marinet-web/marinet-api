@@ -31,10 +31,11 @@ export class CreateComment implements Command {
     }
 
     public exec(): Promise<any> {
-        this._comment.createdAt = new Date();
+        if(this.isCommentNullOrEmpty()) return Promise.reject("Comment cannot be empty or undefined.");
         return new Promise((resolver, reject) => {
             return this._getMongoDB.exec()
                 .then((db) => {
+                    this._comment.createdAt = new Date();
                     return db.collection('comments').insert(this._comment)
                         .then((value) => {
                             resolver(value && value.ops && 0 < value.ops.length
@@ -43,5 +44,9 @@ export class CreateComment implements Command {
                 })
                 .catch(reject);
         });
+    }
+
+    private isCommentNullOrEmpty(): boolean{
+        return !this.comment || Object.keys(this.comment).length === 0
     }
 }
