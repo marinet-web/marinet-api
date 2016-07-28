@@ -36,7 +36,6 @@ export class LoginUser implements Command {
     public exec(): Promise<any> {
         if(!this.user || Object.keys(this.user).length === 0) return Promise.reject('User cannot be undefined or empty.');
         return new Promise((resolver, reject) => {
-
             this._getMongoDB.exec().then((db: Db) => {
                 this._user.password = crypto.createHash('sha512')
                     .update(this._user.password)
