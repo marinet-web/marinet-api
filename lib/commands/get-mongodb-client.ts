@@ -20,6 +20,8 @@ export class GetMongoDB implements Command {
         this._config = config;
     }
 
+    
+
     public exec(): Promise<Db> {
         return new Promise<Db>((resolver, reject) => {
             console.log(`Connecting to ${this._config.mongoUrl}`);

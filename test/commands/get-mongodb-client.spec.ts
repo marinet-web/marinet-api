@@ -61,6 +61,7 @@ describe('Get mongodb client command', () => {
             createUser.setup(c => c.exec()).returns(() => Promise.resolve(user));
         });
 
+        //TODO: Fix mongo Client injection
         it('should return mongodb client', () => {
             //expect.fail();
         });
