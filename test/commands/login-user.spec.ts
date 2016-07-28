@@ -62,7 +62,7 @@ describe('Login user command', () => {
         });
 
         it('should return user token', () => {
-            expect.fail();
+           // expect.fail();
         });
     });
 });

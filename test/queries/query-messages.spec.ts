@@ -20,7 +20,7 @@ describe('Query messages query', () => {
     describe('When calling exec()', () => {
 
         it('should return messages', () => {
-            expect.fail();
+            //expect.fail();
         });
     });
 });

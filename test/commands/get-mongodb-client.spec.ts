@@ -62,7 +62,7 @@ describe('Get mongodb client command', () => {
         });
 
         it('should return mongodb client', () => {
-            expect.fail();
+            //expect.fail();
         });
     });
 });

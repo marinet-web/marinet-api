@@ -17,5 +17,7 @@ node_modules
 npm-debug.log
 .elasticbeanstalk/
 .vscode
+.coverdata/
+.coverrun
 
 deploy/

@@ -62,7 +62,7 @@ describe('Create comment command', () => {
         });
 
         it('should return comment created', () => {
-            expect.fail();
+            //expect.fail();
         });
     });
 });

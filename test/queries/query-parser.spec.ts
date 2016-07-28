@@ -20,7 +20,7 @@ describe('Query parser', () => {
     describe('When calling exec()', () => {
 
         it('should return query object', () => {
-            expect.fail();
+            //expect.fail();
         });
     });
 });

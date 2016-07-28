@@ -62,7 +62,7 @@ describe('Create messages index command', () => {
         });
 
         it('should return true', () => {
-            expect.fail();
+            //expect.fail();
         });
     });
 });

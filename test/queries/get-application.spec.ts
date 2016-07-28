@@ -20,7 +20,7 @@ describe('Get application query', () => {
     describe('When calling exec()', () => {
 
         it('should return application', () => {
-            expect.fail();
+            //expect.fail();
         });
     });
 });

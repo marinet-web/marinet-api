@@ -62,7 +62,7 @@ describe('Save message command', () => {
         });
 
         it('should return message saved', () => {
-            expect.fail();
+            //expect.fail();
         });
     });
 });

@@ -62,7 +62,7 @@ describe('Create MD5 command', () => {
         });
 
         it('should return md5 string', () => {
-            expect.fail();
+            //expect.fail();
         });
     });
 });

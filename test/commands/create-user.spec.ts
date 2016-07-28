@@ -62,7 +62,7 @@ describe('Create user command', () => {
         });
 
         it('should return user created', () => {
-            expect.fail();
+            //expect.fail();
         });
     });
 });

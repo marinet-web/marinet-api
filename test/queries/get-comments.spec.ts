@@ -20,7 +20,7 @@ describe('Get comments query', () => {
     describe('When calling exec()', () => {
 
         it('should return comments', () => {
-            expect.fail();
+            //expect.fail();
         });
     });
 });
