@@ -43,7 +43,6 @@ export class ApplicationController {
 
   @Post('/', guard().check(['admin']))
   public post(request: Request) {
-    console.log('Create app ==================');
     this._createApplication.app = request.body;
     this._createApplication.app.users = [request.user._id];
     this._createApplication.app.createdAt = new Date();
@@ -52,6 +51,6 @@ export class ApplicationController {
 
   @Delete('/', guard().check(['admin']))
   public delete(): string {
-    return 'Home sweet home';
+    throw Error('Not implemented');
   }
 }
