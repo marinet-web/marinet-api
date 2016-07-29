@@ -3,6 +3,7 @@ import { Controller, Get, Post, Delete } from 'inversify-express-utils';
 import { injectable, inject } from 'inversify';
 import { Request } from 'express';
 import { ObjectID } from 'mongodb';
+import { Promise } from 'es6-promise';
 
 import { TYPES } from '../types';
 import { CreateApplication } from '../commands';
@@ -43,14 +44,17 @@ export class ApplicationController {
 
   @Post('/', guard().check(['admin']))
   public post(request: Request) {
-    this._createApplication.app = request.body;
-    this._createApplication.app.users = [request.user._id];
-    this._createApplication.app.createdAt = new Date();
+    let app = request.body;
+    if(!app || Object.keys(app).length === 0) return Promise.reject('App must be informed.');
+    app.users = [request.user._id];
+    app.createdAt = new Date();
+
+    this._createApplication.app = app;
     return this._createApplication.exec();
   }
 
   @Delete('/', guard().check(['admin']))
-  public delete(): string {
-    throw Error('Not implemented');
+  public delete() {
+    return Promise.reject('Not implemented');
   }
 }

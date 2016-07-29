@@ -33,7 +33,6 @@ export class CommentsController {
 
     @Post('/', guard().check(['admin']))
     public post(request: Request) {
-        console.log(request.body);
         this._createComment.comment = request.body;
         return this._createComment.exec();
     }
